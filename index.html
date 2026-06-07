@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <title>Brujita del Conocimiento ✨📚</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: "Segoe UI", system-ui, sans-serif;
+
+      /* 🔮 Fondo estilo Indonesia_020626 */
+      background-image: url("./assets/wicca.jpg");
+      background-size: cover;
+      background-repeat: no-repeat;
+      background-attachment: fixed;
+
+      /* Oscurecer un poquito para que el texto se lea bien */
+      background-color: rgba(0, 0, 0, 0.6);
+      background-blend-mode: darken;
+
+      color: #f9eaff;
+    }
+
+    .app {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 24px;
+    }
+
+    .title {
+      text-align: center;
+      margin-bottom: 8px;
+      font-size: 2.2rem;
+      text-shadow: 0 0 12px #000;
+    }
+
+    .subtitle {
+      text-align: center;
+      font-size: 0.95rem;
+      color: #d7c4ff;
+      margin-bottom: 24px;
+      text-shadow: 0 0 8px #000;
+    }
+
+    .card {
+      background: rgba(24, 10, 40, 0.85);
+      border-radius: 16px;
+      padding: 20px;
+      box-shadow: 0 0 25px rgba(180, 120, 255, 0.35);
+      border: 1px solid rgba(210, 160, 255, 0.4);
+      backdrop-filter: blur(6px);
+    }
+
+    .section-title {
+      font-size: 1rem;
+      margin-bottom: 8px;
+      color: #fbd6ff;
+    }
+
+    textarea {
+      width: 100%;
+      min-height: 120px;
+      border-radius: 10px;
+      border: 1px solid #7c4cff;
+      padding: 10px;
+      resize: vertical;
+      background: rgba(10, 4, 20, 0.9);
+      color: #f9eaff;
+      font-size: 0.95rem;
+    }
+
+    textarea::placeholder {
+      color: #9b7cff;
+    }
+
+    .controls {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-top: 16px;
+      align-items: center;
+    }
+
+    select {
+      border-radius: 999px;
+      border: 1px solid #7c4cff;
+      background: rgba(10, 4, 20, 0.9);
+      color: #f9eaff;
+      padding: 8px 12px;
+      font-size: 0.9rem;
+    }
+
+    button {
+      border-radius: 999px;
+      border: none;
+      padding: 10px 18px;
+      font-size: 0.95rem;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: linear-gradient(135deg, #ff9af3, #b57bff);
+      color: #2b0b3f;
+      font-weight: 600;
+      box-shadow: 0 0 12px rgba(255, 180, 255, 0.6);
+    }
+
+    button:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+      box-shadow: none;
+    }
+
+    .sparkle {
+      font-size: 1.1rem;
+    }
+
+    .output {
+      margin-top: 20px;
+      padding: 16px;
+      border-radius: 12px;
+      background: rgba(12, 5, 25, 0.9);
+      border: 1px solid rgba(150, 110, 255, 0.5);
+      max-height: 280px;
+      overflow-y: auto;
+      font-size: 0.95rem;
+      line-height: 1.5;
+    }
+
+    .output-title {
+      font-weight: 600;
+      margin-bottom: 8px;
+      color: #fbd6ff;
+    }
+
+    .tagline {
+      margin-top: 10px;
+      font-size: 0.85rem;
+      color: #c9b5ff;
+      text-align: center;
+    }
+
+    .status {
+      margin-top: 8px;
+      font-size: 0.85rem;
+      color: #ffdf9a;
+    }
+
+    .status.error {
+      color: #ff9a9a;
+    }
+
+    .chips {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 10px;
+    }
+
+    .chip {
+      font-size: 0.8rem;
+      padding: 6px 10px;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.06);
+      border: 1px dashed rgba(200, 160, 255, 0.6);
+      color: #e8d7ff;
+      cursor: pointer;
+    }
+
+    .chip:hover {
+      background: rgba(255, 255, 255, 0.12);
+    }
+
+    input.apiKey {
+      width: 100%;
+      padding: 10px;
+      border-radius: 10px;
+      border: 1px solid #7c4cff;
+      background: rgba(10, 4, 20, 0.9);
+      color: #f9eaff;
+      margin-top: 6px;
+      font-size: 0.9rem;
+    }
+  </style>
+</head>
+<body>
+  <div class="app">
+    <h1 class="title">Brujita del Conocimiento 🔮</h1>
+    <p class="subtitle">
+      Convierte cualquier texto en un conjuro de estudio: resúmenes, preguntas, juegos y retos mágicos ✨
+    </p>
+
+    <div class="card">
+      <div class="section-title">1. Pega tu texto (el grimorio) 📜</div>
+      <textarea id="inputText" placeholder="Escribe o pega aquí el texto que quieres estudiar..."></textarea>
+
+      <div class="chips">
+        <div class="chip" onclick="setSampleText('cuento')">✨ Texto tipo cuento</div>
+        <div class="chip" onclick="setSampleText('teoria')">📚 Texto teórico</div>
+        <div class="chip" onclick="setSampleText('idiomas')">🌍 Texto para idiomas</div>
+      </div>
+
+      <div class="section-title" style="margin-top:18px;">2. Elige el tipo de conjuro 🧙‍♀️</div>
+      <div class="controls">
+        <select id="mode">
+          <option value="resumen">Resumen mágico del texto</option>
+          <option value="preguntas">Preguntas tipo quiz</option>
+          <option value="flashcards">Tarjetas de estudio</option>
+          <option value="juego">Mini juego V/F</option>
+          <option value="explicacion">Explicación estilo brujita</option>
+        </select>
+      </div>
+
+      <div class.section-title style="margin-top:18px;">3. Ingresa tu API Key de Groq 🔑</div>
+      <input id="apiKeyInput" type="password" class="apiKey" placeholder="Escribe aquí tu API key...">
+
+      <button id="castButton" onclick="castSpell()">
+        <span class="sparkle">✨</span>
+        Lanzar conjuro de estudio
+      </button>
+
+      <div id="status" class="status"></div>
+
+      <div class="output" id="output">
+        <div class="output-title">Resultado del conjuro 🪄</div>
+        <div id="outputContent">
+          Aquí aparecerá tu resumen, quiz o juego mágico una vez invoques a la brujita…
+        </div>
+      </div>
+
+      <p class="tagline">
+        Tip: usa textos cortos al inicio y ve subiendo de nivel como una bruja en entrenamiento 🧪
+      </p>
+    </div>
+  </div>
+
+  <script>
+    const GROQ_URL = "https://api.groq.com/openai/v1/chat/completions";
+    const MODEL = "groq/compound";
+
+    function getApiKey() {
+      return document.getElementById("apiKeyInput").value.trim();
+    }
+
+    function setSampleText(tipo) {
+      const textarea = document.getElementById("inputText");
+      if (tipo === "cuento") {
+        textarea.value =
+          "Había una vez una pequeña bruja aprendiz que quería entender el poder de las palabras...";
+      } else if (tipo === "teoria") {
+        textarea.value =
+          "La fotosíntesis es el proceso mediante el cual las plantas convierten la energía luminosa...";
+      } else if (tipo === "idiomas") {
+        textarea.value =
+          "Learning a new language is like learning a new spell. Each word has power...";
+      }
+    }
+
+    async function castSpell() {
+      const text = document.getElementById("inputText").value.trim();
+      const mode = document.getElementById("mode").value;
+      const statusEl = document.getElementById("status");
+      const outputContent = document.getElementById("outputContent");
+      const button = document.getElementById("castButton");
+
+      const GROQ_API_KEY = getApiKey();
+
+      if (!text) {
+        statusEl.textContent = "Primero escribe o pega un texto en el grimorio 📜";
+        return;
+      }
+
+      if (!GROQ_API_KEY) {
+        statusEl.textContent = "Debes ingresar tu API key para invocar el conjuro 🔑✨";
+        statusEl.classList.add("error");
+        return;
+      }
+
+      button.disabled = true;
+      statusEl.textContent = "Invocando a la brujita del conocimiento... ✨";
+      statusEl.classList.remove("error");
+      outputContent.textContent = "";
+
+      const systemPrompt =
+        "Eres una brujita maestra del conocimiento. Explicas y creas actividades de estudio " +
+        "de forma mágica, divertida y clara, pero sin perder precisión. Siempre hablas en español.";
+
+      let userPrompt = "";
+
+      if (mode === "resumen") {
+        userPrompt = "Haz un resumen mágico del siguiente texto:\n\n" + text;
+      } else if (mode === "preguntas") {
+        userPrompt = "Genera preguntas tipo quiz sobre este texto:\n\n" + text;
+      } else if (mode === "flashcards") {
+        userPrompt = "Crea flashcards mágicas basadas en este texto:\n\n" + text;
+      } else if (mode === "juego") {
+        userPrompt = "Crea un juego de verdadero/falso basado en este texto:\n\n" + text;
+      } else if (mode === "explicacion") {
+        userPrompt = "Explica este texto como una brujita aprendiz:\n\n" + text;
+      }
+
+      try {
+        const response = await fetch(GROQ_URL, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${GROQ_API_KEY}`,
+          },
+          body: JSON.stringify({
+            model: MODEL,
+            messages: [
+              { role: "system", content: systemPrompt },
+              { role: "user", content: userPrompt },
+            ],
+            temperature: 0.8,
+          }),
+        });
+
+        const data = await response.json();
+        const content = data.choices?.[0]?.message?.content || "Error inesperado.";
+
+        outputContent.textContent = content;
+        statusEl.textContent = "Conjuro lanzado con éxito 🪄";
+      } catch (error) {
+        statusEl.textContent = "Hubo un error al llamar a la API.";
+        statusEl.classList.add("error");
+      } finally {
+        button.disabled = false;
+      }
+    }
+  </script>
+</body>
+</html>
