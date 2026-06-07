@@ -3,759 +3,494 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-    <title>HilosMagicos_774 · Brujita del Conocimiento 🔮</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,600;14..32,700&display=swap" rel="stylesheet">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+    <title>Brujita del Conocimiento 🔮 | Grimorio Mágico</title>
     <style>
         * {
+            box-sizing: border-box;
             margin: 0;
             padding: 0;
-            box-sizing: border-box;
         }
 
         body {
-            background: linear-gradient(145deg, #2b1e3a 0%, #4a2c6d 40%, #2a1a48 100%);
-            font-family: 'Inter', 'Segoe UI', sans-serif;
-            color: #f3e6ff;
+            background: linear-gradient(145deg, #1e1a2f 0%, #2a1e3c 100%);
+            font-family: 'Segoe UI', 'Quicksand', system-ui, 'Inter', -apple-system, BlinkMacSystemFont, 'Roboto', sans-serif;
             min-height: 100vh;
-            padding: 1.5rem;
-            position: relative;
-            overflow-x: hidden;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 2rem 1.5rem;
         }
 
-        /* GIFs mágicos (estrellas, caldero, luna) */
-        .magic-gif {
-            position: fixed;
-            pointer-events: none;
-            z-index: 1;
-            opacity: 0.55;
-            filter: drop-shadow(0 0 8px rgba(160, 100, 255, 0.5));
-            transition: all 0.3s ease;
-        }
-        .gif1 { bottom: 20px; left: 10px; width: 150px; }
-        .gif2 { bottom: 30px; right: 15px; width: 160px; }
-        .gif3 { top: 20px; left: 20px; width: 120px; opacity: 0.5; }
-
-        .magic-dust {
-            position: fixed;
-            bottom: 0;
-            left: 0;
+        .app {
+            max-width: 800px;
             width: 100%;
-            height: 100px;
-            background: repeating-linear-gradient(45deg, #9b6bff33, #9b6bff33 30px, #c98eff33 30px, #c98eff33 60px);
-            pointer-events: none;
-            z-index: 0;
-        }
-
-        .container {
-            max-width: 1100px;
-            width: 100%;
-            margin: 0 auto;
-            background: rgba(30, 18, 48, 0.85);
-            backdrop-filter: blur(12px);
+            background: rgba(255, 248, 235, 0.1);
+            backdrop-filter: blur(3px);
             border-radius: 3rem;
-            border: 2px solid #b77eff;
-            box-shadow: 0 20px 35px rgba(0, 0, 0, 0.4), 0 0 0 3px #b77eff33 inset;
-            padding: 1.5rem 2rem;
-            transition: all 0.2s;
-            z-index: 10;
-            position: relative;
+            padding: 1.8rem 2rem 2.2rem;
+            box-shadow: 0 25px 45px rgba(0, 0, 0, 0.3), 0 0 0 1px rgba(255, 215, 150, 0.2);
+            transition: all 0.2s ease;
         }
 
-        .neon-title {
-            font-size: 2.5rem;
-            font-weight: 800;
+        h1 {
             text-align: center;
-            letter-spacing: 2px;
-            background: linear-gradient(135deg, #d9a7ff, #b77eff, #7a4bff);
+            font-size: 2.2rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, #FFE6B0, #E6B87E);
             background-clip: text;
             -webkit-background-clip: text;
             color: transparent;
-            text-shadow: 0 0 12px rgba(160, 100, 255, 0.6);
-            margin-bottom: 0.25rem;
-        }
-        .subtitulo {
-            text-align: center;
-            font-weight: 500;
-            color: #ccaaee;
-            margin-bottom: 1.2rem;
-            font-size: 0.9rem;
-            border-bottom: 1px dashed #b77eff;
-            display: inline-block;
-            width: auto;
-            margin-left: auto;
-            margin-right: auto;
-            padding-bottom: 6px;
+            text-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+            margin-bottom: 0.5rem;
+            letter-spacing: -0.5px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            flex-wrap: wrap;
         }
 
-        .two-columns {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 1.8rem;
-            margin: 1rem 0;
-        }
-        .exam-panel {
-            flex: 1.2;
-            min-width: 260px;
-            background: #241b36;
+        .card {
+            background: #fffaf2;
             border-radius: 2rem;
-            padding: 1.2rem;
-            border: 1px solid #a06eff;
-            box-shadow: 0 8px 14px rgba(0,0,0,0.3);
+            padding: 1.6rem 1.8rem;
+            box-shadow: inset 0 1px 4px rgba(0,0,0,0.02), 0 12px 28px rgba(0, 0, 0, 0.2);
+            margin: 1rem 0 0.8rem;
         }
-        .chat-panel {
-            flex: 1.8;
-            min-width: 280px;
-            background: #2a1f3e;
-            border-radius: 2rem;
-            padding: 1rem;
-            border: 1px solid #b87eff;
-            box-shadow: 0 8px 14px rgba(0,0,0,0.3);
-        }
-        .exam-title {
-            font-size: 1.5rem;
-            font-weight: 700;
-            color: #e2bcff;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            margin-bottom: 1rem;
-            border-left: 7px solid #c48eff;
-            padding-left: 12px;
-        }
-        .config-group {
-            margin-bottom: 1rem;
-            display: flex;
-            flex-wrap: wrap;
-            gap: 12px;
-            align-items: center;
-            justify-content: space-between;
-        }
-        .config-label {
+
+        label {
             font-weight: 600;
-            color: #dcc3ff;
+            display: block;
+            margin: 1.2rem 0 0.5rem 0;
+            color: #3e2a2f;
+            font-size: 1rem;
+            letter-spacing: -0.2px;
         }
-        .num-input {
-            width: 85px;
-            background: #3b2a4f;
-            border: 2px solid #b27aff;
-            border-radius: 40px;
-            padding: 8px 12px;
-            font-weight: bold;
-            text-align: center;
-            color: #f2e6ff;
+
+        label:first-of-type {
+            margin-top: 0;
         }
-        select {
-            background: #3b2a4f;
-            border: 2px solid #b27aff;
-            border-radius: 40px;
-            padding: 8px 16px;
-            font-weight: 500;
-            color: #f2e6ff;
-        }
-        .btn-magick {
-            background: linear-gradient(100deg, #7a4bff, #a06eff);
-            border: none;
-            border-radius: 60px;
-            padding: 10px 20px;
-            font-weight: bold;
-            color: #f2ebff;
-            cursor: pointer;
-            transition: 0.2s;
-            font-size: 0.9rem;
-            box-shadow: 0 3px 8px rgba(0,0,0,0.3);
-        }
-        .btn-magick:hover {
-            transform: scale(1.02);
-            background: #915eff;
-            box-shadow: 0 5px 15px rgba(122, 75, 255, 0.5);
-        }
-        .questions-area {
-            margin-top: 1.3rem;
-            max-height: 380px;
-            overflow-y: auto;
-            background: #1f162f;
-            border-radius: 1.2rem;
-            padding: 0.8rem;
-        }
-        .question-card {
-            background: #2c2142;
-            border-radius: 1.2rem;
-            padding: 0.9rem;
-            margin-bottom: 1rem;
-            border-left: 5px solid #c48eff;
-            box-shadow: 0 1px 5px rgba(0,0,0,0.3);
-        }
-        .question-text {
-            font-weight: 700;
-            margin-bottom: 10px;
-            color: #f0e2ff;
-        }
-        .options {
-            margin-left: 0.8rem;
-            display: flex;
-            flex-direction: column;
-            gap: 8px;
-        }
-        .option {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            color: #e9d6ff;
-        }
-        .exam-result {
-            margin: 1rem 0;
-            font-weight: bold;
-            background: #3b2c58;
-            border-radius: 30px;
-            padding: 10px;
-            text-align: center;
-            color: #ffe7b0;
-        }
-        .glass-input {
-            background: #2e2146;
-            border: 1px solid #b27aff;
-            border-radius: 60px;
-            padding: 10px 18px;
-            font-size: 0.85rem;
-            font-weight: 500;
+
+        textarea, input {
             width: 100%;
-            color: #f1e9ff;
-        }
-        .file-label {
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            background: #5c3e94;
-            padding: 8px 18px;
-            border-radius: 40px;
-            font-weight: 600;
-            cursor: pointer;
-        }
-        .doc-status {
-            font-size: 0.75rem;
-            margin-top: 6px;
-            color: #c7abff;
-        }
-        .chat-window {
-            background: #241b35;
+            padding: 0.9rem 1rem;
+            font-size: 0.95rem;
+            font-family: inherit;
+            background: #fef7e8;
+            border: 2px solid #ecd9b4;
             border-radius: 1.5rem;
-            height: 280px;
-            overflow-y: auto;
-            padding: 0.8rem;
-            margin: 0.8rem 0;
+            transition: 0.2s;
+            color: #2c1e2a;
         }
-        .message {
-            margin-bottom: 0.8rem;
-            padding: 0.5rem 1rem;
-            border-radius: 1rem;
-            background: #362951cc;
-            border-left: 3px solid #c48eff;
-            font-size: 0.85rem;
-            color: #f3ecff;
+
+        input {
+            background: #fffef7;
+            font-family: monospace;
+            letter-spacing: 0.3px;
         }
-        .input-area {
-            display: flex;
-            gap: 10px;
-            margin-top: 8px;
+
+        textarea:focus, input:focus {
+            outline: none;
+            border-color: #b57c48;
+            box-shadow: 0 0 0 3px rgba(181, 124, 72, 0.3);
         }
-        footer {
-            font-size: 0.7rem;
-            text-align: center;
-            margin-top: 1rem;
-            opacity: 0.7;
+
+        textarea {
+            resize: vertical;
         }
-        .progress-bar {
+
+        select, button {
+            font-size: 1rem;
+            font-family: inherit;
+            background: #ffffff;
+            border: 2px solid #e5cfac;
+            border-radius: 2rem;
+            padding: 0.7rem 1.2rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
+            color: #2c1e2a;
+        }
+
+        select {
             width: 100%;
-            height: 4px;
-            background: #3d2a5e;
-            border-radius: 2px;
-            margin-top: 6px;
+            background-color: #fef3e4;
         }
-        .progress-fill {
-            width: 0%;
-            height: 100%;
-            background: #bb8eff;
+
+        button {
+            background: #6b3e26;
+            color: white;
+            border: none;
+            margin-top: 1.8rem;
+            width: 100%;
+            font-weight: bold;
+            font-size: 1.1rem;
+            padding: 0.9rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            box-shadow: 0 5px 0 #3e2418;
+            transform: translateY(-2px);
         }
-        @media (max-width: 800px) {
-            .two-columns { flex-direction: column; }
-            .container { padding: 1rem; }
+
+        button:active {
+            transform: translateY(3px);
+            box-shadow: 0 1px 0 #3e2418;
         }
-        button:disabled { opacity: 0.5; transform: none; cursor: not-allowed; }
-        input::placeholder {
-            color: #b197cf;
+
+        button:disabled {
+            opacity: 0.6;
+            transform: none;
+            cursor: not-allowed;
+        }
+
+        .api-key-row {
+            background: #f2ede1;
+            padding: 0.5rem 0.8rem;
+            border-radius: 1.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .api-status {
+            font-size: 0.75rem;
+            margin-top: 0.3rem;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: #5e4b3c;
+        }
+
+        .api-status span {
+            font-weight: bold;
+        }
+
+        .valid-key {
+            color: #2b6e3c;
+        }
+
+        .invalid-key {
+            color: #b13e3e;
+        }
+
+        .result-box {
+            margin-top: 1.5rem;
+            background: #2b1e2c;
+            border-radius: 1.8rem;
+            padding: 1.2rem 1.5rem;
+            color: #faeecb;
+            font-family: 'Courier New', 'Fira Code', monospace;
+            font-size: 0.95rem;
+            white-space: pre-wrap;
+            word-break: break-word;
+            border-left: 6px solid #e7b874;
+            max-height: 450px;
+            overflow-y: auto;
+            box-shadow: inset 0 0 0 1px #523f3a, 0 5px 12px black;
+        }
+
+        .loading {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            font-style: italic;
+            color: #ffda99;
+        }
+
+        .error {
+            color: #ffb4a2;
+            background: #3a1e1e;
+            border-left-color: #ff6b6b;
+        }
+
+        footer {
+            text-align: center;
+            margin-top: 1.5rem;
+            font-size: 0.75rem;
+            color: #cdba95;
+        }
+
+        hr {
+            margin: 0.5rem 0;
+            border-color: #e9d5b5;
+        }
+
+        .helper-text {
+            font-size: 0.7rem;
+            color: #8b765a;
+            margin-top: 0.2rem;
+        }
+
+        @media (max-width: 550px) {
+            .app {
+                padding: 1.2rem;
+            }
+            .card {
+                padding: 1.2rem;
+            }
+            h1 {
+                font-size: 1.6rem;
+            }
         }
     </style>
 </head>
 <body>
+<div class="app">
+    <h1>🔮 Brujita del Conocimiento <span style="font-size:1.9rem;">✨</span></h1>
+    <div class="card">
+        <!-- 🔑 BARRA PARA INGRESAR API KEY -->
+        <div class="api-key-row">
+            <label>🔐 Llave mágica (API Key de Groq) 🗝️</label>
+            <input type="password" id="apiKeyInput" placeholder="gsk_... pega aquí tu API Key de Groq" autocomplete="off">
+            <div class="api-status" id="apiStatus">
+                <span>🔮</span> <span id="apiStatusText">Esperando clave...</span>
+            </div>
+            <div class="helper-text">✨ Obtén tu clave gratis en <a href="https://console.groq.com" target="_blank" style="color:#b57c48;">console.groq.com</a> (se guarda solo en este navegador)</div>
+        </div>
 
-<!-- GIFs mágicos temática brujita / hechizos -->
-<img src="https://media.giphy.com/media/v1.Y2lkZWFyY2g9c3RhcjMmc2lkPUdpZnlTdGFyJnR5cGU9Z2lmJnJpZD1yb2NreSZjcD1zJnR5cGU9Z2lmeD1iZWxsYSZ0PXdhdGVyJmNvdW50PTEw&ct=s" class="magic-gif gif1" alt="caldero mágico">
-<img src="https://media.giphy.com/media/3oEjI6SIIHBdRxXI40/giphy.gif" class="magic-gif gif2" alt="luna y estrellas">
-<img src="https://media.giphy.com/media/26gR2qgf63G1M4EIM/giphy.gif" class="magic-gif gif3" alt="estrellas brillantes">
-<div class="magic-dust"></div>
+        <label>📜 Texto del grimorio</label>
+        <textarea id="inputText" rows="6" placeholder="Pega aquí tu texto sagrado, apuntes, lecciones o conjuros escritos..."></textarea>
 
-<div class="container">
-    <h1 class="neon-title">🔮 HilosMagicos_774 · Brujita del Conocimiento ✨</h1>
-    <div class="subtitulo">📜 Grimorio interactivo · Preguntas con esencia · Hechizos de estudio profundo</div>
-
-    <!-- Credenciales de API Groq -->
-    <div style="display: flex; flex-wrap: wrap; gap: 12px; margin-bottom: 1rem; align-items: center;">
-        <input type="password" id="apiKeyInput" class="glass-input" placeholder="🔑 Llave secreta de Groq (API Key)" style="flex:2;">
-        <select id="modelSelect" class="glass-input" style="flex:1;">
-            <option value="llama-3.3-70b-versatile">🦙 Llama 3.3 70B</option>
-            <option value="groq/compound">🌕 Llama 3 70B</option>
-            <option value="mixtral-8x7b-32768">🌙 Mixtral 8x7B</option>
-            <option value="gemma2-9b-it">💎 Gemma 2 9B</option>
+        <label>✨ Tipo de conjuro</label>
+        <select id="mode">
+            <option value="resumen">📖 Resumen mágico</option>
+            <option value="preguntas">❓ Preguntas tipo quiz</option>
+            <option value="flashcards">🃏 Flashcards (estudio veloz)</option>
+            <option value="vf">⚖️ Verdadero / Falso</option>
+            <option value="explicacion">🧙 Explicación estilo brujita</option>
         </select>
-    </div>
 
-    <!-- Carga de grimorio (documento) -->
-    <div style="margin-bottom: 1rem;">
-        <label for="fileInput" class="file-label">📜 Cargar Grimorio (PDF / TXT · hasta miles páginas)</label>
-        <input type="file" id="fileInput" accept=".txt,.pdf">
-        <div id="docStatus" class="doc-status">🌙 Ningún grimorio cargado aún</div>
-        <div class="progress-bar" id="progressBar" style="display: none;"><div class="progress-fill" id="progressFill"></div></div>
-    </div>
+        <button id="castBtn">🔮 Lanzar conjuro 🔮</button>
 
-    <!-- Dos paneles: Examen mágico + Chat con la Brujita -->
-    <div class="two-columns">
-        <!-- Panel EXAMEN mágico configurable -->
-        <div class="exam-panel">
-            <div class="exam-title">📖 Conjuro de evaluación <span style="font-size:0.9rem;">✨ esencia del saber</span></div>
-            <div class="config-group">
-                <span class="config-label">🔮 Nº de preguntas:</span>
-                <input type="number" id="numPreguntas" class="num-input" min="1" max="10" value="5">
-                <span class="config-label">🎭 Tipo:</span>
-                <select id="tipoExamen">
-                    <option value="multiple">Opción múltiple (4 hechizos)</option>
-                    <option value="truefalse">Verdadero / Falso arcano</option>
-                </select>
-            </div>
-            <button id="generarExamenBtn" class="btn-magick">🌙 GENERAR CONJURO (preguntas jugosas)</button>
-            <div id="examContentArea" style="margin-top: 1rem;">
-                <div class="questions-area" id="questionsContainer">
-                    <div style="color:#c6aaff; text-align:center;">✨ Invoque el conjuro para extraer las preguntas más profundas del grimorio ✨</div>
-                </div>
-                <button id="submitExamBtn" class="btn-magick" style="margin-top: 12px; width:100%;" disabled>📜 Calificar respuestas mágicas</button>
-                <div id="examResultDiv" class="exam-result" style="display: none;"></div>
-            </div>
-        </div>
-
-        <!-- Panel CHAT libre con la Brujita del Conocimiento -->
-        <div class="chat-panel">
-            <div class="exam-title" style="font-size:1.2rem;">🗣️ Consulte a la Brujita</div>
-            <div class="chat-window" id="chatWindow">
-                <div class="message"><b>🔮 Brujita del Conocimiento:</b> ¡Bienvenidx, aprendiz de hechizos! He tejido hilos mágicos para descifrar cualquier grimorio. Carga un documento (PDF/TXT) y podré hacerte preguntas que revelan el alma del texto, o simplemente pregúntame con confianza.</div>
-            </div>
-            <div class="input-area">
-                <input type="text" id="userInput" placeholder="Pregunta a la brujita sobre el documento...">
-                <button id="sendBtn" class="btn-magick" style="padding: 8px 16px;">✨ Enviar</button>
-                <button id="clearChatBtn" class="btn-magick" style="background:#5f44a0;">🧹 Limpiar</button>
-            </div>
+        <div class="result-box" id="resultContainer">
+            💫 El resultado aparecerá aquí después de invocar a la API...
         </div>
     </div>
-    <footer>🔮 HilosMagicos_774 · Examen con jugo del saber · Preguntas que desatan la verdadera comprensión 🌙</footer>
+    <footer>🐈‍⬛ Grimorio potenciado por Groq • Tu clave se guarda localmente</footer>
 </div>
 
 <script>
-    // ==================== INDEXACIÓN DEL GRIMORIO ====================
-    let pageIndex = [];
-    let documentoIndexado = false;
-    let totalPaginas = 0;
-    let nombreDocumento = "";
-    const GROQ_API_URL = "https://api.groq.com/openai/v1/chat/completions";
-    pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+    // --------------------------------------------------------------
+    // CONFIGURACIÓN: La API Key se lee desde el input del usuario
+    const API_URL = 'https://api.groq.com/openai/v1/chat/completions';
+    // --------------------------------------------------------------
 
-    // DOM elementos
+    // Elementos DOM
     const apiKeyInput = document.getElementById('apiKeyInput');
-    const modelSelect = document.getElementById('modelSelect');
-    const fileInput = document.getElementById('fileInput');
-    const docStatusDiv = document.getElementById('docStatus');
-    const progressBar = document.getElementById('progressBar');
-    const progressFill = document.getElementById('progressFill');
-    const chatWindow = document.getElementById('chatWindow');
-    const userInput = document.getElementById('userInput');
-    const sendBtn = document.getElementById('sendBtn');
-    const clearChatBtn = document.getElementById('clearChatBtn');
+    const apiStatusText = document.getElementById('apiStatusText');
+    const inputTextarea = document.getElementById('inputText');
+    const modeSelect = document.getElementById('mode');
+    const castButton = document.getElementById('castBtn');
+    const resultDiv = document.getElementById('resultContainer');
 
-    // Exam
-    const numPreguntasInput = document.getElementById('numPreguntas');
-    const tipoExamenSelect = document.getElementById('tipoExamen');
-    const generarExamenBtn = document.getElementById('generarExamenBtn');
-    const submitExamBtn = document.getElementById('submitExamBtn');
-    const questionsContainer = document.getElementById('questionsContainer');
-    const examResultDiv = document.getElementById('examResultDiv');
-
-    let currentExamQuestions = [];
-    let userAnswers = [];
-
-    // ========== Funciones auxiliares ==========
-    function addMessageToChat(sender, text, isError = false) {
-        const msgDiv = document.createElement('div');
-        msgDiv.className = 'message';
-        if (isError) msgDiv.style.borderLeftColor = '#ff8989';
-        let displayName = sender === 'user' ? '🔮 Tú' : (sender === 'vaitiare' ? '🧙 Brujita' : '⚗️ Sistema');
-        if (sender === 'system') displayName = '⚗️ Sistema';
-        msgDiv.innerHTML = `<b>${displayName}:</b> ${escapeHtml(text)}`;
-        chatWindow.appendChild(msgDiv);
-        chatWindow.scrollTop = chatWindow.scrollHeight;
-    }
-
-    function escapeHtml(str) {
-        if (!str) return '';
-        return str.replace(/[&<>]/g, function(m) {
-            if (m === '&') return '&amp;';
-            if (m === '<') return '&lt;';
-            if (m === '>') return '&gt;';
-            return m;
-        });
-    }
-
-    async function cargarDocumento(file) {
-        if (!file) return;
-        addMessageToChat('system', `📜 Iniciando lectura del grimorio "${file.name}"...`, false);
-        docStatusDiv.innerHTML = `🔄 Conjurando magia sobre "${file.name}"...`;
-        progressBar.style.display = 'block';
-        progressFill.style.width = '0%';
-        try {
-            let paginasTexto = [];
-            if (file.type === "application/pdf") {
-                const arrayBuffer = await file.arrayBuffer();
-                const pdf = await pdfjsLib.getDocument({ data: arrayBuffer }).promise;
-                totalPaginas = pdf.numPages;
-                for (let i = 1; i <= totalPaginas; i++) {
-                    const page = await pdf.getPage(i);
-                    const content = await page.getTextContent();
-                    const pageText = content.items.map(item => item.str).join(' ');
-                    if (pageText && pageText.trim().length > 10) {
-                        paginasTexto.push({ pageNum: i, text: pageText.trim() });
-                    }
-                    const progreso = (i / totalPaginas) * 100;
-                    progressFill.style.width = `${progreso}%`;
-                    if (i % 30 === 0) docStatusDiv.innerHTML = `📖 Descifrando página ${i}/${totalPaginas}...`;
-                    await new Promise(r => setTimeout(r, 5));
-                }
-            } else {
-                const textoCompleto = await file.text();
-                const tamanoPagina = 2000;
-                const numPaginas = Math.ceil(textoCompleto.length / tamanoPagina);
-                totalPaginas = numPaginas;
-                for (let i = 0; i < numPaginas; i++) {
-                    const inicio = i * tamanoPagina;
-                    const fin = Math.min(inicio + tamanoPagina, textoCompleto.length);
-                    const pageText = textoCompleto.substring(inicio, fin);
-                    if (pageText.trim()) paginasTexto.push({ pageNum: i + 1, text: pageText.trim() });
-                    const progreso = ((i + 1) / numPaginas) * 100;
-                    progressFill.style.width = `${progreso}%`;
-                    if (i % 30 === 0) docStatusDiv.innerHTML = `📖 Desentrañando sección ${i+1}/${numPaginas}...`;
-                    await new Promise(r => setTimeout(r, 5));
-                }
-            }
-            if (paginasTexto.length === 0) throw new Error("No se extrajo texto del grimorio");
-            pageIndex = paginasTexto;
-            documentoIndexado = true;
-            nombreDocumento = file.name;
-            const totalChars = pageIndex.reduce((s,p) => s + p.text.length, 0);
-            docStatusDiv.innerHTML = `📖 Grimorio activo: "${nombreDocumento}" · ${totalPaginas} páginas · ${(totalChars/1024/1024).toFixed(2)} MB de sabiduría`;
-            addMessageToChat('vaitiare', `¡He absorbido la esencia de "${nombreDocumento}"! ${totalPaginas} páginas destiladas. Ahora puedo crear hechizos de preguntas jugosas y responder con la magia del texto.`, false);
-        } catch (err) {
-            docStatusDiv.innerHTML = `⚠️ Error ritual: ${err.message}`;
-            addMessageToChat('system', `Error al indexar: ${err.message}`, true);
-            documentoIndexado = false;
-            pageIndex = [];
-        } finally {
-            progressBar.style.display = 'none';
-            progressFill.style.width = '0%';
+    // Cargar API Key guardada en localStorage al iniciar
+    function loadStoredApiKey() {
+        const storedKey = localStorage.getItem('groq_api_key');
+        if (storedKey) {
+            apiKeyInput.value = storedKey;
+            updateApiStatus(true);
+        } else {
+            updateApiStatus(false);
         }
     }
 
-    // Obtiene contexto balanceado y jugoso de TODO el grimorio (páginas clave)
-    function getBalancedJuicyContext(maxChars = 5500) {
-        if (!documentoIndexado || pageIndex.length === 0) return "";
-        const totalPaginas = pageIndex.length;
-        if (totalPaginas === 0) return "";
-        let indicesSeleccionados = new Set();
-        indicesSeleccionados.add(0);
-        if (totalPaginas > 1) indicesSeleccionados.add(totalPaginas - 1);
-        if (totalPaginas >= 3) {
-            let tercio = Math.floor(totalPaginas / 3);
-            if (tercio > 0 && tercio !== 0 && !indicesSeleccionados.has(tercio)) indicesSeleccionados.add(tercio);
-            let dosTercios = Math.floor(2 * totalPaginas / 3);
-            if (dosTercios > 0 && dosTercios !== tercio && dosTercios < totalPaginas && !indicesSeleccionados.has(dosTercios)) indicesSeleccionados.add(dosTercios);
-        }
-        if (indicesSeleccionados.size < 3 && totalPaginas > 2) {
-            let mitad = Math.floor(totalPaginas / 2);
-            if (!indicesSeleccionados.has(mitad)) indicesSeleccionados.add(mitad);
-        }
-        let contexto = "";
-        let charsAcum = 0;
-        const indicesOrdenados = Array.from(indicesSeleccionados).sort((a,b)=>a-b);
-        for (let idx of indicesOrdenados) {
-            if (idx >= pageIndex.length) continue;
-            let textoPag = pageIndex[idx].text;
-            if (textoPag.length > 1300) textoPag = textoPag.substring(0, 1300) + "…";
-            let fragmento = `🔮 Fragmento esencial (pág. ${pageIndex[idx].pageNum}):\n${textoPag}\n\n`;
-            if (charsAcum + fragmento.length > maxChars) break;
-            contexto += fragmento;
-            charsAcum += fragmento.length;
-        }
-        if (contexto.length === 0) contexto = "Contenido del grimorio no disponible para análisis profundo.";
-        return contexto;
-    }
-
-    function extractJSONFromText(text) {
-        let cleaned = text.replace(/```json/g, '').replace(/```/g, '').trim();
-        const firstBrace = cleaned.indexOf('{');
-        const lastBrace = cleaned.lastIndexOf('}');
-        if (firstBrace === -1 || lastBrace === -1) throw new Error("No se encontró conjuro JSON válido");
-        const jsonStr = cleaned.substring(firstBrace, lastBrace + 1);
-        return JSON.parse(jsonStr);
-    }
-
-    async function generarExamenConGroq() {
-        if (!documentoIndexado || pageIndex.length === 0) {
-            addMessageToChat('system', "Primero carga un grimorio (PDF/TXT) para lanzar el conjuro.", true);
-            return false;
-        }
-        const apiKey = apiKeyInput.value.trim();
-        if (!apiKey) { addMessageToChat('system', "Ingresa tu API Key secreta de Groq.", true); return false; }
-        const numQ = Math.min(parseInt(numPreguntasInput.value, 10), 10);
-        const tipo = tipoExamenSelect.value;
-        const modelo = modelSelect.value;
-
-        const contextoJugoso = getBalancedJuicyContext(5200);
-        if (!contextoJugoso || contextoJugoso.length < 200) { 
-            addMessageToChat('system', "El grimorio tiene muy poca esencia para extraer preguntas jugosas.", true); 
-            return null; 
-        }
-
-        let promptInstrucciones = `Eres la Brujita del Conocimiento, creadora de exámenes arcanos que indagan en el JUGO MÁGICO de los textos. 
-Tu tarea: basándote en los fragmentos esenciales del grimorio, genera ${numQ} preguntas profundas que revelen el alma, contradicciones, moralejas, simbolismos, intenciones ocultas y significado central del contenido.
-EVITA preguntas superficiales (fechas o datos triviales). Tus preguntas deben desafiar la comprensión integral.
-🎯 Tipo de examen: ${tipo === 'multiple' ? 'MULTIPLE CHOICE (4 opciones A, B, C, D)' : 'VERDADERO/FALSO (afirmaciones sustanciosas)'}.
-Para verdadero/falso, formula enunciados que inviten al análisis reflexivo.
-
-Devuelve ÚNICAMENTE un JSON válido, estructura: {"questions": [{"text": "pregunta jugosa", "options": ["op1","op2",...], "correct": "respuesta"}]}
-Para multiple choice: options = 4 strings, correct = letra mayúscula A, B, C o D.
-Para verdadero/falso: options = ["Verdadero", "Falso"], correct = "Verdadero" o "Falso".
-Las preguntas deben ser elixir de sabiduría.`;
-
-        const userContent = `Extractos balanceados del grimorio (páginas clave, inicio y final):\n\n${contextoJugoso}\n\nGenera ${numQ} preguntas jugosas tipo ${tipo} que destilen la verdadera esencia del texto.`;
-
-        try {
-            const response = await fetch(GROQ_API_URL, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${apiKey}` },
-                body: JSON.stringify({
-                    model: modelo,
-                    messages: [
-                        { role: "system", content: promptInstrucciones },
-                        { role: "user", content: userContent }
-                    ],
-                    temperature: 0.55,
-                    max_tokens: 2100
-                })
-            });
-            if (!response.ok) {
-                const errText = await response.text();
-                throw new Error(`Error ${response.status}: ${errText.substring(0, 150)}`);
-            }
-            const data = await response.json();
-            const raw = data.choices[0].message.content;
-            console.log("Respuesta conjuro:", raw);
-            let jsonExam;
-            try {
-                jsonExam = extractJSONFromText(raw);
-            } catch(e) {
-                console.error("Fallo parseo", e);
-                throw new Error("La respuesta no contenía JSON válido, el hechizo falló.");
-            }
-            if (!jsonExam.questions || !Array.isArray(jsonExam.questions)) throw new Error("Formato inválido");
-            return jsonExam.questions.slice(0, numQ);
-        } catch (err) {
-            addMessageToChat('system', `Error en la invocación del conjuro: ${err.message}`, true);
-            return null;
-        }
-    }
-
-    function renderExam(questions) {
-        questionsContainer.innerHTML = "";
-        if (!questions || questions.length === 0) {
-            questionsContainer.innerHTML = "<div style='color:#c6aaff;'>No se pudieron tejer preguntas jugosas. Intenta de nuevo.</div>";
-            submitExamBtn.disabled = true;
+    // Actualizar estado visual de la API Key
+    function updateApiStatus(isValidFormat = null) {
+        const currentKey = apiKeyInput.value.trim();
+        if (!currentKey) {
+            apiStatusText.innerHTML = '⚠️ Sin llave mágica — ingresa tu API Key';
+            apiStatusText.className = 'invalid-key';
             return;
         }
-        currentExamQuestions = questions;
-        userAnswers = new Array(questions.length).fill(null);
-        for (let idx = 0; idx < questions.length; idx++) {
-            const q = questions[idx];
-            const card = document.createElement('div');
-            card.className = 'question-card';
-            const qText = document.createElement('div');
-            qText.className = 'question-text';
-            qText.innerText = `${idx+1}. ${q.text}`;
-            card.appendChild(qText);
-            const optsDiv = document.createElement('div');
-            optsDiv.className = 'options';
-            const optionsArray = q.options;
-            if (optionsArray && Array.isArray(optionsArray)) {
-                optionsArray.forEach((opt) => {
-                    const label = document.createElement('label');
-                    label.className = 'option';
-                    const radio = document.createElement('input');
-                    radio.type = 'radio';
-                    radio.name = `question_${idx}`;
-                    radio.value = opt;
-                    radio.addEventListener('change', (e) => {
-                        if (e.target.checked) userAnswers[idx] = opt;
-                    });
-                    const span = document.createElement('span');
-                    span.innerText = opt;
-                    label.appendChild(radio);
-                    label.appendChild(span);
-                    optsDiv.appendChild(label);
-                });
-            } else {
-                optsDiv.innerText = "Opciones mágicas no disponibles";
-            }
-            card.appendChild(optsDiv);
-            questionsContainer.appendChild(card);
-        }
-        submitExamBtn.disabled = false;
-        examResultDiv.style.display = 'none';
-        examResultDiv.innerHTML = "";
-    }
-
-    function calificarExamen() {
-        if (!currentExamQuestions.length) return;
-        let aciertos = 0;
-        const resultados = [];
-        currentExamQuestions.forEach((q, idx) => {
-            const userResp = userAnswers[idx];
-            let correctaRaw = q.correct ? q.correct.trim() : "";
-            const opciones = q.options && Array.isArray(q.options) ? q.options : [];
-            let correctaTexto = correctaRaw;
-            if (correctaRaw.length === 1 && /^[A-Da-d]$/.test(correctaRaw)) {
-                const letraIdx = correctaRaw.toUpperCase().charCodeAt(0) - 65;
-                if (opciones[letraIdx] !== undefined) correctaTexto = opciones[letraIdx];
-            }
-            let isOk = false;
-            if (userResp && correctaTexto) {
-                isOk = correctaTexto.trim().toLowerCase() === userResp.trim().toLowerCase();
-            }
-            if (isOk) aciertos++;
-            resultados.push(`Pregunta ${idx+1}: ${isOk ? '✓' : '✗'} (Correcta: ${correctaTexto})`);
-        });
-        const puntaje = (aciertos / currentExamQuestions.length) * 100;
-        examResultDiv.style.display = 'block';
-        examResultDiv.innerHTML = `<strong>🏆 Resultado mágico: ${aciertos}/${currentExamQuestions.length} (${puntaje.toFixed(0)}%)</strong><br>${resultados.join('<br>')}`;
-        addMessageToChat('vaitiare', `¡Excelente! Has completado el conjuro. Obtuviste ${aciertos} de ${currentExamQuestions.length} aciertos. La sabiduría del grimorio te reconoce.`, false);
-    }
-
-    // ========== CHAT con la brujita ==========
-    async function sendToGroqChat(question, apiKey, modelName) {
-        let contexto = "";
-        if (documentoIndexado && pageIndex.length > 0) {
-            const queryLower = question.toLowerCase();
-            const palabras = queryLower.split(/\s+/).filter(p => p.length > 3);
-            let paginasRelevantes = pageIndex.slice(0, 2);
-            if (palabras.length) {
-                const puntuadas = pageIndex.map(p => {
-                    let score = 0;
-                    palabras.forEach(kw => { if (p.text.toLowerCase().includes(kw)) score += 20; });
-                    return { p, score };
-                });
-                puntuadas.sort((a,b)=>b.score - a.score);
-                paginasRelevantes = puntuadas.slice(0, 2).map(x => x.p);
-            }
-            contexto = "Fragmentos relevantes del grimorio:\n" + paginasRelevantes.map(p => `--- Pág ${p.pageNum} ---\n${p.text.substring(0, 1000)}`).join("\n\n");
+        if (currentKey.startsWith('gsk_') && currentKey.length > 20) {
+            apiStatusText.innerHTML = '✅ Llave válida (formato Groq)';
+            apiStatusText.className = 'valid-key';
+        } else if (currentKey.length > 10) {
+            apiStatusText.innerHTML = '🟡 Clave ingresada (verifica que empiece con gsk_)';
+            apiStatusText.className = '';
         } else {
-            contexto = "No hay grimorio cargado, responde con tu sabiduría mágica general.";
+            apiStatusText.innerHTML = '❌ Formato incorrecto - La clave Groq empieza con "gsk_"';
+            apiStatusText.className = 'invalid-key';
         }
-        const system = "Eres la Brujita del Conocimiento (HilosMagicos_774). Tono místico, cálido y profundo. Respondes basándote en el documento subido si existe, revelando el jugo del texto. Si no hay documento, respondes con conocimiento esotérico pero siempre útil.";
-        const payload = {
-            model: modelName,
-            messages: [
-                { role: "system", content: system },
-                { role: "user", content: `Pregunta: ${question}\n\n${contexto}\n\nResponde con claridad y sabiduría, extrayendo esencia si es posible.` }
-            ],
-            temperature: 0.7,
-            max_tokens: 800
-        };
-        const response = await fetch(GROQ_API_URL, {
+    }
+
+    // Guardar clave en localStorage cuando el usuario la escribe
+    function saveApiKey() {
+        const key = apiKeyInput.value.trim();
+        if (key) {
+            localStorage.setItem('groq_api_key', key);
+        } else {
+            localStorage.removeItem('groq_api_key');
+        }
+        updateApiStatus();
+    }
+
+    // Obtener la clave actual
+    function getApiKey() {
+        return apiKeyInput.value.trim();
+    }
+
+    // Función para construir el prompt según el modo seleccionado
+    function buildPrompt(textoUsuario, modo) {
+        const instruccionesBase = `Eres la "Brujita del Conocimiento", una sabia y divertida maga que ayuda a estudiar y comprender textos. 
+Usa un tono cálido, místico pero claro, con emojis ocasionales. Siempre responde en español. El texto original es: 
+"""${textoUsuario}"""`;
+
+        switch (modo) {
+            case 'resumen':
+                return `${instruccionesBase}\n\n📜 **CONJURO DE RESUMEN**: Haz un resumen conciso pero completo del texto, destacando las ideas principales, en 6 a 10 líneas. Usa viñetas o párrafos claros.`;
+
+            case 'preguntas':
+                return `${instruccionesBase}\n\n❓ **QUIZ MÁGICO**: Genera 5 preguntas de opción múltiple (tipo test) basadas en el texto. Cada pregunta debe tener 4 opciones (A, B, C, D) y al final indica la respuesta correcta brevemente. Formato claro.`;
+
+            case 'flashcards':
+                return `${instruccionesBase}\n\n🃏 **FLASHCARDS**: Crea 4-6 fichas de estudio. Cada flashcard debe tener: "📌 Término:" y "✨ Definición/Concepto:". Sepáralas con líneas.`;
+
+            case 'vf':
+                return `${instruccionesBase}\n\n⚖️ **VERDADERO O FALSO**: Genera 5 afirmaciones basadas en el texto. Cada una debe ir acompañada de "✅ Verdadero" o "❌ Falso". Al final proporciona una pequeña corrección para las falsas.`;
+
+            case 'explicacion':
+                return `${instruccionesBase}\n\n🧙 **EXPLICACIÓN ESTILO BRUJITA**: Explica el contenido como si fueras una maestra mágica, usando analogías, chispa y sabiduría. Hazlo ameno, didáctico y profundo pero no demasiado largo (4-6 párrafos).`;
+
+            default:
+                return `${instruccionesBase}\n\nAnaliza el texto y entrega información útil para estudiar.`;
+        }
+    }
+
+    // Función para invocar Groq
+    async function invokeGroq(prompt, apiKey) {
+        const response = await fetch(API_URL, {
             method: 'POST',
-            headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${apiKey}` },
-            body: JSON.stringify(payload)
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${apiKey}`
+            },
+            body: JSON.stringify({
+                model: 'groq/compound',   // modelo rápido y bueno de Groq
+                messages: [
+                    { role: 'system', content: 'Eres una asistente mágica, experta en pedagogía, que responde con creatividad y precisión.' },
+                    { role: 'user', content: prompt }
+                ],
+                temperature: 0.7,
+                max_tokens: 1200,
+                top_p: 0.95
+            })
         });
+
         if (!response.ok) {
-            const errText = await response.text();
-            throw new Error(`Error ${response.status}: ${errText.substring(0, 100)}`);
+            let errorDetail = `HTTP ${response.status}`;
+            try {
+                const errData = await response.json();
+                errorDetail = errData.error?.message || JSON.stringify(errData);
+            } catch(e) { /* no json */ }
+            throw new Error(`Groq Error: ${errorDetail}`);
         }
+
         const data = await response.json();
-        return data.choices[0].message.content;
+        const respuesta = data.choices?.[0]?.message?.content;
+        if (!respuesta) throw new Error('Respuesta inesperada de la API');
+        return respuesta;
     }
 
-    let isSending = false;
-    async function handleChat() {
-        if (isSending) return;
-        const apiKey = apiKeyInput.value.trim();
-        if (!apiKey) { addMessageToChat('system', "Necesitas la llave secreta de Groq para invocar la respuesta.", true); return; }
-        const question = userInput.value.trim();
-        if (!question) return;
-        addMessageToChat('user', question);
-        userInput.value = '';
-        isSending = true;
-        sendBtn.disabled = true;
-        const loadingMsg = document.createElement('div');
-        loadingMsg.className = 'message';
-        loadingMsg.innerHTML = `<b>🧙 Brujita:</b> <em>tejiendo hechizo...</em>`;
-        chatWindow.appendChild(loadingMsg);
-        try {
-            const answer = await sendToGroqChat(question, apiKey, modelSelect.value);
-            loadingMsg.remove();
-            addMessageToChat('vaitiare', answer);
-        } catch (err) {
-            loadingMsg.remove();
-            addMessageToChat('system', `Error en la comunicación: ${err.message}`, true);
-        } finally {
-            isSending = false;
-            sendBtn.disabled = false;
+    // Mostrar loading
+    function setLoading(isLoading) {
+        if (isLoading) {
+            castButton.disabled = true;
+            resultDiv.innerHTML = `<div class="loading">🌀 Invocando espíritus de Groq... <span>🔮✨</span></div>`;
+            resultDiv.classList.remove('error');
+        } else {
+            castButton.disabled = false;
         }
     }
 
-    function clearChat() {
-        while (chatWindow.children.length > 1) chatWindow.removeChild(chatWindow.lastChild);
-        addMessageToChat('vaitiare', 'El caldero de la conversación ha sido purificado. Continúa con tus preguntas.');
+    function showError(mensaje) {
+        resultDiv.innerHTML = `<div class="error">⚠️ ${mensaje}</div>`;
+        resultDiv.classList.add('error');
+    }
+
+    function showResult(texto) {
+        // Escapar HTML básico para seguridad, pero permitir saltos de línea
+        const textoFormateado = texto
+            .replace(/&/g, '&amp;')
+            .replace(/</g, '&lt;')
+            .replace(/>/g, '&gt;')
+            .replace(/\n/g, '<br>');
+        resultDiv.innerHTML = `<div>✨ ${textoFormateado}</div>`;
+        resultDiv.classList.remove('error');
+    }
+
+    // Evento principal
+    async function lanzarConjuro() {
+        const apiKey = getApiKey();
+        if (!apiKey) {
+            showError("🔑 ¡Necesitas una llave mágica! Ingresa tu API Key de Groq en el campo de arriba. Consíguela gratis en console.groq.com");
+            return;
+        }
+        
+        if (!apiKey.startsWith('gsk_') || apiKey.length < 30) {
+            showError("⚠️ La llave parece incorrecta. Las API Keys de Groq empiezan con 'gsk_' y son largas. Revisa y vuelve a pegarla.");
+            return;
+        }
+
+        const textoUsuario = inputTextarea.value.trim();
+        if (!textoUsuario) {
+            showError("📜 ¡Oh no! El grimorio está vacío. Escribe o pega algún texto mágico antes de lanzar el hechizo.");
+            return;
+        }
+
+        const modoElegido = modeSelect.value;
+        const promptFinal = buildPrompt(textoUsuario, modoElegido);
+
+        setLoading(true);
+        try {
+            const respuestaMagica = await invokeGroq(promptFinal, apiKey);
+            showResult(respuestaMagica);
+            // Guardar la clave si es exitosa (ya se guarda con el evento)
+            saveApiKey();
+        } catch (err) {
+            console.error(err);
+            let userMessage = err.message;
+            if (userMessage.includes('API Key') || userMessage.includes('api_key') || userMessage.includes('unauthorized') || userMessage.includes('401')) {
+                userMessage = '🔐 Llave mágica inválida o rechazada. Verifica que tu API Key de Groq sea correcta (empieza con gsk_) y tenga créditos.';
+            } else if (userMessage.includes('fetch') || userMessage.includes('network')) {
+                userMessage = '🌙 Error de red: ¿Estás conectado/a? Revisa tu conexión o si hay un bloqueador.';
+            } else if (userMessage.includes('429')) {
+                userMessage = '⏳ Demasiadas peticiones mágicas. Espera un poco y vuelve a intentar.';
+            } else {
+                userMessage = `💀 Hechizo fallido: ${err.message}`;
+            }
+            showError(userMessage);
+        } finally {
+            setLoading(false);
+        }
     }
 
     // Eventos
-    fileInput.addEventListener('change', (e) => { if(e.target.files[0]) cargarDocumento(e.target.files[0]); });
-    sendBtn.addEventListener('click', handleChat);
-    clearChatBtn.addEventListener('click', clearChat);
-    userInput.addEventListener('keypress', (e) => { if(e.key === 'Enter') handleChat(); });
+    castButton.addEventListener('click', lanzarConjuro);
+    apiKeyInput.addEventListener('input', () => {
+        updateApiStatus();
+        // guardar automáticamente mientras escribe (con pequeño debounce)
+        clearTimeout(window.saveTimeout);
+        window.saveTimeout = setTimeout(() => {
+            saveApiKey();
+        }, 800);
+    });
+    
+    // Guardar también al perder foco
+    apiKeyInput.addEventListener('blur', saveApiKey);
 
-    generarExamenBtn.addEventListener('click', async () => {
-        if (!documentoIndexado) { addMessageToChat('system', "Carga un grimorio antes de invocar el conjuro de examen.", true); return; }
-        generarExamenBtn.disabled = true;
-        generarExamenBtn.innerText = "🌙 Tejiendo preguntas jugosas...";
-        questionsContainer.innerHTML = "<div style='text-align:center; color:#d3b5ff'>🔮 Extrayendo la esencia del grimorio...</div>";
-        const preguntas = await generarExamenConGroq();
-        if (preguntas && preguntas.length) {
-            renderExam(preguntas);
-            addMessageToChat('vaitiare', `He preparado ${preguntas.length} preguntas que destilan el jugo del conocimiento. ¡Descubre los secretos del texto!`, false);
-        } else {
-            questionsContainer.innerHTML = "<div style='color:#ceabff'>El conjuro falló. Verifica tu llave API o que el grimorio tenga texto sustancioso.</div>";
-            submitExamBtn.disabled = true;
+    // Ctrl+Enter en textarea
+    inputTextarea.addEventListener('keydown', (e) => {
+        if ((e.ctrlKey || e.metaKey) && e.key === 'Enter') {
+            e.preventDefault();
+            lanzarConjuro();
         }
-        generarExamenBtn.disabled = false;
-        generarExamenBtn.innerText = "🌙 GENERAR CONJURO (preguntas jugosas)";
     });
 
-    submitExamBtn.addEventListener('click', () => {
-        if (!currentExamQuestions.length) { addMessageToChat('system', "No hay examen activo. Invoque uno primero.", true); return; }
-        calificarExamen();
-    });
+    // Inicializar: cargar clave guardada y mostrar estado
+    loadStoredApiKey();
+    updateApiStatus();
 </script>
 </body>
 </html>
