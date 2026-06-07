@@ -395,7 +395,7 @@ Usa un tono cálido, místico pero claro, con emojis ocasionales. Siempre respon
                 'Authorization': `Bearer ${apiKey}`
             },
             body: JSON.stringify({
-                model: 'llama3-8b-8192',
+                model: 'groq/compound',
                 messages: [
                     { role: 'system', content: 'Eres una asistente mágica, experta en pedagogía, que responde con creatividad y precisión.' },
                     { role: 'user', content: prompt }
