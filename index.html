@@ -8,13 +8,11 @@
       margin: 0;
       font-family: "Segoe UI", system-ui, sans-serif;
 
-      /* 🔮 Fondo estilo Indonesia_020626 */
       background-image: url("./assets/wicca.jpg");
       background-size: cover;
       background-repeat: no-repeat;
       background-attachment: fixed;
 
-      /* Oscurecer un poquito para que el texto se lea bien */
       background-color: rgba(0, 0, 0, 0.6);
       background-blend-mode: darken;
 
@@ -211,7 +209,7 @@
         </select>
       </div>
 
-      <div class.section-title style="margin-top:18px;">3. Ingresa tu API Key de Groq 🔑</div>
+      <div class="section-title" style="margin-top:18px;">3. Ingresa tu API Key de Groq 🔑</div>
       <input id="apiKeyInput" type="password" class="apiKey" placeholder="Escribe aquí tu API key...">
 
       <button id="castButton" onclick="castSpell()">
@@ -235,8 +233,7 @@
   </div>
 
   <script>
-    const GROQ_URL = "https://api.groq.com/openai/v1/chat/completions";
-    const MODEL = "groq/compound";
+    const BACKEND_URL = "https://TU_BACKEND.com/groq.php"; // pon aquí la URL donde subas groq.php
 
     function getApiKey() {
       return document.getElementById("apiKeyInput").value.trim();
@@ -263,14 +260,14 @@
       const outputContent = document.getElementById("outputContent");
       const button = document.getElementById("castButton");
 
-      const GROQ_API_KEY = getApiKey();
+      const apiKey = getApiKey();
 
       if (!text) {
         statusEl.textContent = "Primero escribe o pega un texto en el grimorio 📜";
         return;
       }
 
-      if (!GROQ_API_KEY) {
+      if (!apiKey) {
         statusEl.textContent = "Debes ingresar tu API key para invocar el conjuro 🔑✨";
         statusEl.classList.add("error");
         return;
@@ -300,29 +297,23 @@
       }
 
       try {
-        const response = await fetch(GROQ_URL, {
+        const response = await fetch(BACKEND_URL, {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
-            Authorization: `Bearer ${GROQ_API_KEY}`,
           },
           body: JSON.stringify({
-            model: MODEL,
-            messages: [
-              { role: "system", content: systemPrompt },
-              { role: "user", content: userPrompt },
-            ],
-            temperature: 0.8,
+            apiKey: apiKey,
+            systemPrompt: systemPrompt,
+            userPrompt: userPrompt
           }),
         });
 
         const data = await response.json();
-        const content = data.choices?.[0]?.message?.content || "Error inesperado.";
-
-        outputContent.textContent = content;
+        outputContent.textContent = data.choices?.[0]?.message?.content || "Error inesperado.";
         statusEl.textContent = "Conjuro lanzado con éxito 🪄";
       } catch (error) {
-        statusEl.textContent = "Hubo un error al llamar a la API.";
+        statusEl.textContent = "Hubo un error al llamar al servidor.";
         statusEl.classList.add("error");
       } finally {
         button.disabled = false;
