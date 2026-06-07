@@ -94,6 +94,449 @@
             resize: vertical;
         }
 
+        .char-counter {
+            text-align: right;
+            font-size: 0.75rem;
+            margin-top: 0.3rem;
+            color: #6b5a4a;
+        }
+        .char-counter.warning {
+            color: #d97706;
+            font-weight: bold;
+        }
+        .char-counter.danger {
+            color: #dc2626;
+            font-weight: bold;
+        }
+
+        select, button {
+            font-size: 1rem;
+            font-family: inherit;
+            background: #ffffff;
+            border: 2px solid #e5cfac;
+            border-radius: 2rem;
+            padding: 0.7rem 1.2rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
+            color: #2c1e2a;
+        }
+
+        select {
+            width: 100%;
+            background-color: #fef3e4;
+        }
+
+        button {
+            background: #6b3e26;
+            color: white;
+            border: none;
+            margin-top: 1.8rem;
+            width: 100%;
+            font-weight: bold;
+            font-size: 1.1rem;
+            padding: 0.9rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            box-shadow: 0 5px 0 #3e2418;
+            transform: translateY(-2px);
+        }
+
+        button:active {
+            transform: translateY(3px);
+            box-shadow: 0 1px 0 #3e2418;
+        }
+
+        button:disabled {
+            opacity: 0.6;
+            transform: none;
+            cursor: not-allowed;
+        }
+
+        .api-key-row {
+            background: #f2ede1;
+            padding: 0.5rem 0.8rem;
+            border-radius: 1.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .api-status {
+            font-size: 0.75rem;
+            margin-top: 0.3rem;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: #5e4b3c;
+        }
+
+        .valid-key {
+            color: #2b6e3c;
+        }
+
+        .invalid-key {
+            color: #b13e3e;
+        }
+
+        .result-box {
+            margin-top: 1.5rem;
+            background: #2b1e2c;
+            border-radius: 1.8rem;
+            padding: 1.2rem 1.5rem;
+            color: #faeecb;
+            font-family: 'Courier New', 'Fira Code', monospace;
+            font-size: 0.95rem;
+            white-space: pre-wrap;
+            word-break: break-word;
+            border-left: 6px solid #e7b874;
+            max-height: 450px;
+            overflow-y: auto;
+            box-shadow: inset 0 0 0 1px #523f3a, 0 5px 12px black;
+        }
+
+        .loading {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            font-style: italic;
+            color: #ffda99;
+        }
+
+        .error {
+            color: #ffb4a2;
+            background: #3a1e1e;
+            border-left-color: #ff6b6b;
+        }
+
+        footer {
+            text-align: center;
+            margin-top: 1.5rem;
+            font-size: 0.75rem;
+            color: #cdba95;
+        }
+
+        .helper-text {
+            font-size: 0.7rem;
+            color: #8b765a;
+            margin-top: 0.2rem;
+        }
+
+        .warning-banner {
+            background: #fff3cd;
+            border-left: 4px solid #ffc107;
+            padding: 0.8rem;
+            border-radius: 1rem;
+            margin-bottom: 1rem;
+            font-size: 0.8rem;
+            color: #856404;
+        }
+
+        @media (max-width: 550px) {
+            .app {
+                padding: 1.2rem;
+            }
+            .card {
+                padding: 1.2rem;
+            }
+            h1 {
+                font-size: 1.6rem;
+            }
+        }
+    </style>
+</head>
+<body>
+<div class="app">
+    <h1>🔮 Brujita del Conocimiento <span style="font-size:1.9rem;">✨</span></h1>
+    <div class="card">
+        <div class="warning-banner">
+            ⚠️ Versión con proxy CORS (solución temporal). Máximo 4000 caracteres en el texto para evitar errores.
+        </div>
+
+        <div class="api-key-row">
+            <label>🔐 Llave mágica (API Key de Groq) 🗝️</label>
+            <input type="password" id="apiKeyInput" placeholder="gsk_... pega aquí tu API Key de Groq" autocomplete="off">
+            <div class="api-status" id="apiStatus">
+                <span>🔮</span> <span id="apiStatusText">Esperando clave...</span>
+            </div>
+            <div class="helper-text">✨ Obtén tu clave gratis en <a href="https://console.groq.com" target="_blank" style="color:#b57c48;">console.groq.com</a></div>
+        </div>
+
+        <label>📜 Texto del grimorio (máx. 4000 caracteres)</label>
+        <textarea id="inputText" rows="6" placeholder="Pega aquí tu texto sagrado..."></textarea>
+        <div id="charCounter" class="char-counter">0 / 4000 caracteres</div>
+
+        <label>✨ Tipo de conjuro</label>
+        <select id="mode">
+            <option value="resumen">📖 Resumen mágico</option>
+            <option value="preguntas">❓ Preguntas tipo quiz</option>
+            <option value="flashcards">🃏 Flashcards (estudio veloz)</option>
+            <option value="vf">⚖️ Verdadero / Falso</option>
+            <option value="explicacion">🧙 Explicación estilo brujita</option>
+        </select>
+
+        <button id="castBtn">🔮 Lanzar conjuro 🔮</button>
+
+        <div class="result-box" id="resultContainer">
+            💫 El resultado aparecerá aquí después de invocar a la API...
+        </div>
+    </div>
+    <footer>🐈‍⬛ Usando proxy CORS • Máx. 4000 caracteres</footer>
+</div>
+
+<script>
+    // CONFIGURACIÓN
+    const PROXY_URL = 'https://corsproxy.io/';
+    const API_URL = 'https://api.groq.com/openai/v1/chat/completions';
+    const MAX_TEXT_LENGTH = 4000;  // Ajusta según necesidad (Groq tiene límite de contexto)
+    
+    const apiKeyInput = document.getElementById('apiKeyInput');
+    const apiStatusText = document.getElementById('apiStatusText');
+    const inputTextarea = document.getElementById('inputText');
+    const charCounterDiv = document.getElementById('charCounter');
+    const modeSelect = document.getElementById('mode');
+    const castButton = document.getElementById('castBtn');
+    const resultDiv = document.getElementById('resultContainer');
+
+    // Contador de caracteres
+    function updateCharCounter() {
+        const len = inputTextarea.value.length;
+        charCounterDiv.innerText = `${len} / ${MAX_TEXT_LENGTH} caracteres`;
+        if (len > MAX_TEXT_LENGTH) {
+            charCounterDiv.classList.add('danger');
+            charCounterDiv.classList.remove('warning');
+        } else if (len > MAX_TEXT_LENGTH * 0.9) {
+            charCounterDiv.classList.add('warning');
+            charCounterDiv.classList.remove('danger');
+        } else {
+            charCounterDiv.classList.remove('warning', 'danger');
+        }
+    }
+    
+    inputTextarea.addEventListener('input', updateCharCounter);
+    updateCharCounter();
+
+    function loadStoredApiKey() {
+        const storedKey = localStorage.getItem('groq_api_key');
+        if (storedKey) {
+            apiKeyInput.value = storedKey;
+            updateApiStatus(true);
+        } else {
+            updateApiStatus(false);
+        }
+    }
+
+    function updateApiStatus() {
+        const currentKey = apiKeyInput.value.trim();
+        if (!currentKey) {
+            apiStatusText.innerHTML = '⚠️ Sin llave mágica — ingresa tu API Key';
+            apiStatusText.className = 'invalid-key';
+            return;
+        }
+        if (currentKey.startsWith('gsk_') && currentKey.length > 20) {
+            apiStatusText.innerHTML = '✅ Llave válida (formato Groq)';
+            apiStatusText.className = 'valid-key';
+        } else if (currentKey.length > 10) {
+            apiStatusText.innerHTML = '🟡 Clave ingresada (verifica que empiece con gsk_)';
+            apiStatusText.className = '';
+        } else {
+            apiStatusText.innerHTML = '❌ Formato incorrecto - La clave Groq empieza con "gsk_"';
+            apiStatusText.className = 'invalid-key';
+        }
+    }
+
+    function saveApiKey() {
+        const key = apiKeyInput.value.trim();
+        if (key) {
+            localStorage.setItem('groq_api_key', key);
+        } else {
+            localStorage.removeItem('groq_api_key');
+        }
+        updateApiStatus();
+    }
+
+    function getApiKey() {
+        return apiKeyInput.value.trim();
+    }
+
+    function buildPrompt(textoUsuario, modo) {
+        // Si el texto es muy largo, truncamos (aunque ya limitamos en UI, por seguridad)
+        let textoFinal = textoUsuario;
+        if (textoFinal.length > MAX_TEXT_LENGTH) {
+            textoFinal = textoFinal.substring(0, MAX_TEXT_LENGTH) + "\n...[texto truncado por exceder límite]";
+        }
+        
+        const instruccionesBase = `Eres la "Brujita del Conocimiento", una sabia y divertida maga que ayuda a estudiar y comprender textos. 
+Usa un tono cálido, místico pero claro, con emojis ocasionales. Siempre responde en español. El texto original es: 
+"""${textoFinal}"""`;
+
+        switch (modo) {
+            case 'resumen':
+                return `${instruccionesBase}\n\n📜 **CONJURO DE RESUMEN**: Haz un resumen conciso pero completo del texto, destacando las ideas principales, en 6 a 10 líneas. Usa viñetas o párrafos claros.`;
+            case 'preguntas':
+                return `${instruccionesBase}\n\n❓ **QUIZ MÁGICO**: Genera 5 preguntas de opción múltiple (tipo test) basadas en el texto. Cada pregunta debe tener 4 opciones (A, B, C, D) y al final indica la respuesta correcta brevemente. Formato claro.`;
+            case 'flashcards':
+                return `${instruccionesBase}\n\n🃏 **FLASHCARDS**: Crea 4-6 fichas de estudio. Cada flashcard debe tener: "📌 Término:" y "✨ Definición/Concepto:". Sepáralas con líneas.`;
+            case 'vf':
+                return `${instruccionesBase}\n\n⚖️ **VERDADERO O FALSO**: Genera 5 afirmaciones basadas en el texto. Cada una debe ir acompañada de "✅ Verdadero" o "❌ Falso". Al final proporciona una pequeña corrección para las falsas.`;
+            case 'explicacion':
+                return `${instruccionesBase}\n\n🧙 **EXPLICACIÓN ESTILO BRUJITA**: Explica el contenido como si fueras una maestra mágica, usando analogías, chispa y sabiduría. Hazlo ameno, didáctico y profundo pero no demasiado largo (4-6 párrafos).`;
+            default:
+                return `${instruccionesBase}\n\nAnaliza el texto y entrega información útil para estudiar.`;
+        }
+    }
+
+    async function invokeGroq(prompt, apiKey) {
+        const response = await fetch(`${PROXY_URL}?url=${encodeURIComponent(API_URL)}`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${apiKey}`
+            },
+            body: JSON.stringify({
+                model: 'llama3-8b-8192',
+                messages: [
+                    { role: 'system', content: 'Eres una asistente mágica, experta en pedagogía, que responde con creatividad y precisión.' },
+                    { role: 'user', content: prompt }
+                ],
+                temperature: 0.7,
+                max_tokens: 1200,
+                top_p: 0.95
+            })
+        });
+
+        if (!response.ok) {
+            let errorDetail = `HTTP ${response.status}`;
+            try {
+                const errData = await response.json();
+                errorDetail = errData.error?.message || JSON.stringify(errData);
+            } catch(e) { }
+            throw new Error(`Groq Error: ${errorDetail}`);
+        }
+
+        const data = await response.json();
+        const respuesta = data.choices?.[0]?.message?.content;
+        if (!respuesta) throw new Error('Respuesta inesperada de la API');
+        return respuesta;
+    }
+
+    function setLoading(isLoading) {
+        if (isLoading) {
+            castButton.disabled = true;
+            resultDiv.innerHTML = `<div class="loading">🌀 Invocando espíritus de Groq... <span>🔮✨</span></div>`;
+            resultDiv.classList.remove('error');
+        } else {
+            castButton.disabled = false;
+        }
+    }
+
+    function showError(mensaje) {
+        resultDiv.innerHTML = `<div class="error">⚠️ ${mensaje}</div>`;
+        resultDiv.classList.add('error');
+    }
+
+    function showResult(texto) {
+        const textoFormateado = texto
+            .replace(/&/g, '&amp;')
+            .replace(/</g, '&lt;')
+            .replace(/>/g, '&gt;')
+            .replace(/\n/g, '<br>');
+        resultDiv.innerHTML = `<div>✨ ${textoFormateado}</div>`;
+        resultDiv.classList.remove('error');
+    }
+
+    async function lanzarConjuro() {
+        const apiKey = getApiKey();
+        if (!apiKey) {
+            showError("🔑 ¡Necesitas una llave mágica! Ingresa tu API Key de Groq.");
+            return;
+        }
+        
+        if (!apiKey.startsWith('gsk_') || apiKey.length < 30) {
+            showError("⚠️ La llave parece incorrecta. Las API Keys de Groq empiezan con 'gsk_' y son largas.");
+            return;
+        }
+
+        let textoUsuario = inputTextarea.value.trim();
+        if (!textoUsuario) {
+            showError("📜 ¡Oh no! El grimorio está vacío. Escribe o pega algún texto mágico.");
+            return;
+        }
+        
+        // Validar tamaño antes de enviar
+        if (textoUsuario.length > MAX_TEXT_LENGTH) {
+            showError(`📏 El texto es demasiado largo (${textoUsuario.length} caracteres). El límite es ${MAX_TEXT_LENGTH} caracteres. Por favor, reduce el texto.`);
+            return;
+        }
+
+        const modoElegido = modeSelect.value;
+        const promptFinal = buildPrompt(textoUsuario, modoElegido);
+        
+        // Verificar también tamaño total del prompt (aproximado)
+        if (promptFinal.length > 10000) {
+            showError(`📏 El texto más los comandos mágicos exceden el límite interno. Intenta con un texto más corto.`);
+            return;
+        }
+
+        setLoading(true);
+        try {
+            const respuestaMagica = await invokeGroq(promptFinal, apiKey);
+            showResult(respuestaMagica);
+            saveApiKey();
+        } catch (err) {
+            console.error(err);
+            let userMessage = err.message;
+            if (userMessage.includes('401') || userMessage.includes('unauthorized')) {
+                userMessage = '🔐 Llave mágica inválida. Verifica tu API Key de Groq.';
+            } else if (userMessage.includes('413') || userMessage.includes('Request Entity Too Large')) {
+                userMessage = `📏 El texto es demasiado grande para la API. Intenta con menos de ${MAX_TEXT_LENGTH} caracteres.`;
+            } else if (userMessage.includes('fetch')) {
+                userMessage = '🌙 Error de conexión. Intenta de nuevo o cambia de proxy.';
+            } else {
+                userMessage = `💀 ${err.message}`;
+            }
+            showError(userMessage);
+        } finally {
+            setLoading(false);
+        }
+    }
+
+    castButton.addEventListener('click', lanzarConjuro);
+    apiKeyInput.addEventListener('input', () => {
+        updateApiStatus();
+        clearTimeout(window.saveTimeout);
+        window.saveTimeout = setTimeout(saveApiKey, 800);
+    });
+    apiKeyInput.addEventListener('blur', saveApiKey);
+    inputTextarea.addEventListener('keydown', (e) => {
+        if ((e.ctrlKey || e.metaKey) && e.key === 'Enter') {
+            e.preventDefault();
+            lanzarConjuro();
+        }
+    });
+
+    loadStoredApiKey();
+    updateApiStatus();
+</script>
+</body>
+    </html>        }
+
+        input {
+            background: #fffef7;
+            font-family: monospace;
+        }
+
+        textarea:focus, input:focus {
+            outline: none;
+            border-color: #b57c48;
+            box-shadow: 0 0 0 3px rgba(181, 124, 72, 0.3);
+        }
+
+        textarea {
+            resize: vertical;
+        }
+
         select, button {
             font-size: 1rem;
             font-family: inherit;
