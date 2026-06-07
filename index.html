@@ -1,324 +1,761 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8" />
-  <title>Brujita del Conocimiento ✨📚</title>
-  <style>
-    body {
-      margin: 0;
-      font-family: "Segoe UI", system-ui, sans-serif;
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>HilosMagicos_774 · Brujita del Conocimiento 🔮</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,600;14..32,700&display=swap" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
 
-      background-image: url("./assets/wicca.jpg");
-      background-size: cover;
-      background-repeat: no-repeat;
-      background-attachment: fixed;
+        body {
+            background: linear-gradient(145deg, #2b1e3a 0%, #4a2c6d 40%, #2a1a48 100%);
+            font-family: 'Inter', 'Segoe UI', sans-serif;
+            color: #f3e6ff;
+            min-height: 100vh;
+            padding: 1.5rem;
+            position: relative;
+            overflow-x: hidden;
+        }
 
-      background-color: rgba(0, 0, 0, 0.6);
-      background-blend-mode: darken;
+        /* GIFs mágicos (estrellas, caldero, luna) */
+        .magic-gif {
+            position: fixed;
+            pointer-events: none;
+            z-index: 1;
+            opacity: 0.55;
+            filter: drop-shadow(0 0 8px rgba(160, 100, 255, 0.5));
+            transition: all 0.3s ease;
+        }
+        .gif1 { bottom: 20px; left: 10px; width: 150px; }
+        .gif2 { bottom: 30px; right: 15px; width: 160px; }
+        .gif3 { top: 20px; left: 20px; width: 120px; opacity: 0.5; }
 
-      color: #f9eaff;
-    }
+        .magic-dust {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 100px;
+            background: repeating-linear-gradient(45deg, #9b6bff33, #9b6bff33 30px, #c98eff33 30px, #c98eff33 60px);
+            pointer-events: none;
+            z-index: 0;
+        }
 
-    .app {
-      max-width: 900px;
-      margin: 0 auto;
-      padding: 24px;
-    }
+        .container {
+            max-width: 1100px;
+            width: 100%;
+            margin: 0 auto;
+            background: rgba(30, 18, 48, 0.85);
+            backdrop-filter: blur(12px);
+            border-radius: 3rem;
+            border: 2px solid #b77eff;
+            box-shadow: 0 20px 35px rgba(0, 0, 0, 0.4), 0 0 0 3px #b77eff33 inset;
+            padding: 1.5rem 2rem;
+            transition: all 0.2s;
+            z-index: 10;
+            position: relative;
+        }
 
-    .title {
-      text-align: center;
-      margin-bottom: 8px;
-      font-size: 2.2rem;
-      text-shadow: 0 0 12px #000;
-    }
+        .neon-title {
+            font-size: 2.5rem;
+            font-weight: 800;
+            text-align: center;
+            letter-spacing: 2px;
+            background: linear-gradient(135deg, #d9a7ff, #b77eff, #7a4bff);
+            background-clip: text;
+            -webkit-background-clip: text;
+            color: transparent;
+            text-shadow: 0 0 12px rgba(160, 100, 255, 0.6);
+            margin-bottom: 0.25rem;
+        }
+        .subtitulo {
+            text-align: center;
+            font-weight: 500;
+            color: #ccaaee;
+            margin-bottom: 1.2rem;
+            font-size: 0.9rem;
+            border-bottom: 1px dashed #b77eff;
+            display: inline-block;
+            width: auto;
+            margin-left: auto;
+            margin-right: auto;
+            padding-bottom: 6px;
+        }
 
-    .subtitle {
-      text-align: center;
-      font-size: 0.95rem;
-      color: #d7c4ff;
-      margin-bottom: 24px;
-      text-shadow: 0 0 8px #000;
-    }
-
-    .card {
-      background: rgba(24, 10, 40, 0.85);
-      border-radius: 16px;
-      padding: 20px;
-      box-shadow: 0 0 25px rgba(180, 120, 255, 0.35);
-      border: 1px solid rgba(210, 160, 255, 0.4);
-      backdrop-filter: blur(6px);
-    }
-
-    .section-title {
-      font-size: 1rem;
-      margin-bottom: 8px;
-      color: #fbd6ff;
-    }
-
-    textarea {
-      width: 100%;
-      min-height: 120px;
-      border-radius: 10px;
-      border: 1px solid #7c4cff;
-      padding: 10px;
-      resize: vertical;
-      background: rgba(10, 4, 20, 0.9);
-      color: #f9eaff;
-      font-size: 0.95rem;
-    }
-
-    textarea::placeholder {
-      color: #9b7cff;
-    }
-
-    .controls {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 12px;
-      margin-top: 16px;
-      align-items: center;
-    }
-
-    select {
-      border-radius: 999px;
-      border: 1px solid #7c4cff;
-      background: rgba(10, 4, 20, 0.9);
-      color: #f9eaff;
-      padding: 8px 12px;
-      font-size: 0.9rem;
-    }
-
-    button {
-      border-radius: 999px;
-      border: none;
-      padding: 10px 18px;
-      font-size: 0.95rem;
-      cursor: pointer;
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      background: linear-gradient(135deg, #ff9af3, #b57bff);
-      color: #2b0b3f;
-      font-weight: 600;
-      box-shadow: 0 0 12px rgba(255, 180, 255, 0.6);
-    }
-
-    button:disabled {
-      opacity: 0.5;
-      cursor: not-allowed;
-      box-shadow: none;
-    }
-
-    .sparkle {
-      font-size: 1.1rem;
-    }
-
-    .output {
-      margin-top: 20px;
-      padding: 16px;
-      border-radius: 12px;
-      background: rgba(12, 5, 25, 0.9);
-      border: 1px solid rgba(150, 110, 255, 0.5);
-      max-height: 280px;
-      overflow-y: auto;
-      font-size: 0.95rem;
-      line-height: 1.5;
-    }
-
-    .output-title {
-      font-weight: 600;
-      margin-bottom: 8px;
-      color: #fbd6ff;
-    }
-
-    .tagline {
-      margin-top: 10px;
-      font-size: 0.85rem;
-      color: #c9b5ff;
-      text-align: center;
-    }
-
-    .status {
-      margin-top: 8px;
-      font-size: 0.85rem;
-      color: #ffdf9a;
-    }
-
-    .status.error {
-      color: #ff9a9a;
-    }
-
-    .chips {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 8px;
-      margin-top: 10px;
-    }
-
-    .chip {
-      font-size: 0.8rem;
-      padding: 6px 10px;
-      border-radius: 999px;
-      background: rgba(255, 255, 255, 0.06);
-      border: 1px dashed rgba(200, 160, 255, 0.6);
-      color: #e8d7ff;
-      cursor: pointer;
-    }
-
-    .chip:hover {
-      background: rgba(255, 255, 255, 0.12);
-    }
-
-    input.apiKey {
-      width: 100%;
-      padding: 10px;
-      border-radius: 10px;
-      border: 1px solid #7c4cff;
-      background: rgba(10, 4, 20, 0.9);
-      color: #f9eaff;
-      margin-top: 6px;
-      font-size: 0.9rem;
-    }
-  </style>
+        .two-columns {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1.8rem;
+            margin: 1rem 0;
+        }
+        .exam-panel {
+            flex: 1.2;
+            min-width: 260px;
+            background: #241b36;
+            border-radius: 2rem;
+            padding: 1.2rem;
+            border: 1px solid #a06eff;
+            box-shadow: 0 8px 14px rgba(0,0,0,0.3);
+        }
+        .chat-panel {
+            flex: 1.8;
+            min-width: 280px;
+            background: #2a1f3e;
+            border-radius: 2rem;
+            padding: 1rem;
+            border: 1px solid #b87eff;
+            box-shadow: 0 8px 14px rgba(0,0,0,0.3);
+        }
+        .exam-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #e2bcff;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 1rem;
+            border-left: 7px solid #c48eff;
+            padding-left: 12px;
+        }
+        .config-group {
+            margin-bottom: 1rem;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            align-items: center;
+            justify-content: space-between;
+        }
+        .config-label {
+            font-weight: 600;
+            color: #dcc3ff;
+        }
+        .num-input {
+            width: 85px;
+            background: #3b2a4f;
+            border: 2px solid #b27aff;
+            border-radius: 40px;
+            padding: 8px 12px;
+            font-weight: bold;
+            text-align: center;
+            color: #f2e6ff;
+        }
+        select {
+            background: #3b2a4f;
+            border: 2px solid #b27aff;
+            border-radius: 40px;
+            padding: 8px 16px;
+            font-weight: 500;
+            color: #f2e6ff;
+        }
+        .btn-magick {
+            background: linear-gradient(100deg, #7a4bff, #a06eff);
+            border: none;
+            border-radius: 60px;
+            padding: 10px 20px;
+            font-weight: bold;
+            color: #f2ebff;
+            cursor: pointer;
+            transition: 0.2s;
+            font-size: 0.9rem;
+            box-shadow: 0 3px 8px rgba(0,0,0,0.3);
+        }
+        .btn-magick:hover {
+            transform: scale(1.02);
+            background: #915eff;
+            box-shadow: 0 5px 15px rgba(122, 75, 255, 0.5);
+        }
+        .questions-area {
+            margin-top: 1.3rem;
+            max-height: 380px;
+            overflow-y: auto;
+            background: #1f162f;
+            border-radius: 1.2rem;
+            padding: 0.8rem;
+        }
+        .question-card {
+            background: #2c2142;
+            border-radius: 1.2rem;
+            padding: 0.9rem;
+            margin-bottom: 1rem;
+            border-left: 5px solid #c48eff;
+            box-shadow: 0 1px 5px rgba(0,0,0,0.3);
+        }
+        .question-text {
+            font-weight: 700;
+            margin-bottom: 10px;
+            color: #f0e2ff;
+        }
+        .options {
+            margin-left: 0.8rem;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+        .option {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: #e9d6ff;
+        }
+        .exam-result {
+            margin: 1rem 0;
+            font-weight: bold;
+            background: #3b2c58;
+            border-radius: 30px;
+            padding: 10px;
+            text-align: center;
+            color: #ffe7b0;
+        }
+        .glass-input {
+            background: #2e2146;
+            border: 1px solid #b27aff;
+            border-radius: 60px;
+            padding: 10px 18px;
+            font-size: 0.85rem;
+            font-weight: 500;
+            width: 100%;
+            color: #f1e9ff;
+        }
+        .file-label {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: #5c3e94;
+            padding: 8px 18px;
+            border-radius: 40px;
+            font-weight: 600;
+            cursor: pointer;
+        }
+        .doc-status {
+            font-size: 0.75rem;
+            margin-top: 6px;
+            color: #c7abff;
+        }
+        .chat-window {
+            background: #241b35;
+            border-radius: 1.5rem;
+            height: 280px;
+            overflow-y: auto;
+            padding: 0.8rem;
+            margin: 0.8rem 0;
+        }
+        .message {
+            margin-bottom: 0.8rem;
+            padding: 0.5rem 1rem;
+            border-radius: 1rem;
+            background: #362951cc;
+            border-left: 3px solid #c48eff;
+            font-size: 0.85rem;
+            color: #f3ecff;
+        }
+        .input-area {
+            display: flex;
+            gap: 10px;
+            margin-top: 8px;
+        }
+        footer {
+            font-size: 0.7rem;
+            text-align: center;
+            margin-top: 1rem;
+            opacity: 0.7;
+        }
+        .progress-bar {
+            width: 100%;
+            height: 4px;
+            background: #3d2a5e;
+            border-radius: 2px;
+            margin-top: 6px;
+        }
+        .progress-fill {
+            width: 0%;
+            height: 100%;
+            background: #bb8eff;
+        }
+        @media (max-width: 800px) {
+            .two-columns { flex-direction: column; }
+            .container { padding: 1rem; }
+        }
+        button:disabled { opacity: 0.5; transform: none; cursor: not-allowed; }
+        input::placeholder {
+            color: #b197cf;
+        }
+    </style>
 </head>
 <body>
-  <div class="app">
-    <h1 class="title">Brujita del Conocimiento 🔮</h1>
-    <p class="subtitle">
-      Convierte cualquier texto en un conjuro de estudio: resúmenes, preguntas, juegos y retos mágicos ✨
-    </p>
 
-    <div class="card">
-      <div class="section-title">1. Pega tu texto (el grimorio) 📜</div>
-      <textarea id="inputText" placeholder="Escribe o pega aquí el texto que quieres estudiar..."></textarea>
+<!-- GIFs mágicos temática brujita / hechizos -->
+<img src="https://media.giphy.com/media/v1.Y2lkZWFyY2g9c3RhcjMmc2lkPUdpZnlTdGFyJnR5cGU9Z2lmJnJpZD1yb2NreSZjcD1zJnR5cGU9Z2lmeD1iZWxsYSZ0PXdhdGVyJmNvdW50PTEw&ct=s" class="magic-gif gif1" alt="caldero mágico">
+<img src="https://media.giphy.com/media/3oEjI6SIIHBdRxXI40/giphy.gif" class="magic-gif gif2" alt="luna y estrellas">
+<img src="https://media.giphy.com/media/26gR2qgf63G1M4EIM/giphy.gif" class="magic-gif gif3" alt="estrellas brillantes">
+<div class="magic-dust"></div>
 
-      <div class="chips">
-        <div class="chip" onclick="setSampleText('cuento')">✨ Texto tipo cuento</div>
-        <div class="chip" onclick="setSampleText('teoria')">📚 Texto teórico</div>
-        <div class="chip" onclick="setSampleText('idiomas')">🌍 Texto para idiomas</div>
-      </div>
+<div class="container">
+    <h1 class="neon-title">🔮 HilosMagicos_774 · Brujita del Conocimiento ✨</h1>
+    <div class="subtitulo">📜 Grimorio interactivo · Preguntas con esencia · Hechizos de estudio profundo</div>
 
-      <div class="section-title" style="margin-top:18px;">2. Elige el tipo de conjuro 🧙‍♀️</div>
-      <div class="controls">
-        <select id="mode">
-          <option value="resumen">Resumen mágico del texto</option>
-          <option value="preguntas">Preguntas tipo quiz</option>
-          <option value="flashcards">Tarjetas de estudio</option>
-          <option value="juego">Mini juego V/F</option>
-          <option value="explicacion">Explicación estilo brujita</option>
+    <!-- Credenciales de API Groq -->
+    <div style="display: flex; flex-wrap: wrap; gap: 12px; margin-bottom: 1rem; align-items: center;">
+        <input type="password" id="apiKeyInput" class="glass-input" placeholder="🔑 Llave secreta de Groq (API Key)" style="flex:2;">
+        <select id="modelSelect" class="glass-input" style="flex:1;">
+            <option value="llama-3.3-70b-versatile">🦙 Llama 3.3 70B</option>
+            <option value="groq/compound">🌕 Llama 3 70B</option>
+            <option value="mixtral-8x7b-32768">🌙 Mixtral 8x7B</option>
+            <option value="gemma2-9b-it">💎 Gemma 2 9B</option>
         </select>
-      </div>
-
-      <div class="section-title" style="margin-top:18px;">3. Ingresa tu API Key de Groq 🔑</div>
-      <input id="apiKeyInput" type="password" class="apiKey" placeholder="Escribe aquí tu API key...">
-
-      <button id="castButton" onclick="castSpell()">
-        <span class="sparkle">✨</span>
-        Lanzar conjuro de estudio
-      </button>
-
-      <div id="status" class="status"></div>
-
-      <div class="output" id="output">
-        <div class="output-title">Resultado del conjuro 🪄</div>
-        <div id="outputContent">
-          Aquí aparecerá tu resumen, quiz o juego mágico una vez invoques a la brujita…
-        </div>
-      </div>
-
-      <p class="tagline">
-        Tip: usa textos cortos al inicio y ve subiendo de nivel como una bruja en entrenamiento 🧪
-      </p>
     </div>
-  </div>
 
-  <script>
-    const BACKEND_URL = "https://TU_BACKEND.com/groq.php"; // pon aquí la URL donde subas groq.php
+    <!-- Carga de grimorio (documento) -->
+    <div style="margin-bottom: 1rem;">
+        <label for="fileInput" class="file-label">📜 Cargar Grimorio (PDF / TXT · hasta miles páginas)</label>
+        <input type="file" id="fileInput" accept=".txt,.pdf">
+        <div id="docStatus" class="doc-status">🌙 Ningún grimorio cargado aún</div>
+        <div class="progress-bar" id="progressBar" style="display: none;"><div class="progress-fill" id="progressFill"></div></div>
+    </div>
 
-    function getApiKey() {
-      return document.getElementById("apiKeyInput").value.trim();
+    <!-- Dos paneles: Examen mágico + Chat con la Brujita -->
+    <div class="two-columns">
+        <!-- Panel EXAMEN mágico configurable -->
+        <div class="exam-panel">
+            <div class="exam-title">📖 Conjuro de evaluación <span style="font-size:0.9rem;">✨ esencia del saber</span></div>
+            <div class="config-group">
+                <span class="config-label">🔮 Nº de preguntas:</span>
+                <input type="number" id="numPreguntas" class="num-input" min="1" max="10" value="5">
+                <span class="config-label">🎭 Tipo:</span>
+                <select id="tipoExamen">
+                    <option value="multiple">Opción múltiple (4 hechizos)</option>
+                    <option value="truefalse">Verdadero / Falso arcano</option>
+                </select>
+            </div>
+            <button id="generarExamenBtn" class="btn-magick">🌙 GENERAR CONJURO (preguntas jugosas)</button>
+            <div id="examContentArea" style="margin-top: 1rem;">
+                <div class="questions-area" id="questionsContainer">
+                    <div style="color:#c6aaff; text-align:center;">✨ Invoque el conjuro para extraer las preguntas más profundas del grimorio ✨</div>
+                </div>
+                <button id="submitExamBtn" class="btn-magick" style="margin-top: 12px; width:100%;" disabled>📜 Calificar respuestas mágicas</button>
+                <div id="examResultDiv" class="exam-result" style="display: none;"></div>
+            </div>
+        </div>
+
+        <!-- Panel CHAT libre con la Brujita del Conocimiento -->
+        <div class="chat-panel">
+            <div class="exam-title" style="font-size:1.2rem;">🗣️ Consulte a la Brujita</div>
+            <div class="chat-window" id="chatWindow">
+                <div class="message"><b>🔮 Brujita del Conocimiento:</b> ¡Bienvenidx, aprendiz de hechizos! He tejido hilos mágicos para descifrar cualquier grimorio. Carga un documento (PDF/TXT) y podré hacerte preguntas que revelan el alma del texto, o simplemente pregúntame con confianza.</div>
+            </div>
+            <div class="input-area">
+                <input type="text" id="userInput" placeholder="Pregunta a la brujita sobre el documento...">
+                <button id="sendBtn" class="btn-magick" style="padding: 8px 16px;">✨ Enviar</button>
+                <button id="clearChatBtn" class="btn-magick" style="background:#5f44a0;">🧹 Limpiar</button>
+            </div>
+        </div>
+    </div>
+    <footer>🔮 HilosMagicos_774 · Examen con jugo del saber · Preguntas que desatan la verdadera comprensión 🌙</footer>
+</div>
+
+<script>
+    // ==================== INDEXACIÓN DEL GRIMORIO ====================
+    let pageIndex = [];
+    let documentoIndexado = false;
+    let totalPaginas = 0;
+    let nombreDocumento = "";
+    const GROQ_API_URL = "https://api.groq.com/openai/v1/chat/completions";
+    pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+
+    // DOM elementos
+    const apiKeyInput = document.getElementById('apiKeyInput');
+    const modelSelect = document.getElementById('modelSelect');
+    const fileInput = document.getElementById('fileInput');
+    const docStatusDiv = document.getElementById('docStatus');
+    const progressBar = document.getElementById('progressBar');
+    const progressFill = document.getElementById('progressFill');
+    const chatWindow = document.getElementById('chatWindow');
+    const userInput = document.getElementById('userInput');
+    const sendBtn = document.getElementById('sendBtn');
+    const clearChatBtn = document.getElementById('clearChatBtn');
+
+    // Exam
+    const numPreguntasInput = document.getElementById('numPreguntas');
+    const tipoExamenSelect = document.getElementById('tipoExamen');
+    const generarExamenBtn = document.getElementById('generarExamenBtn');
+    const submitExamBtn = document.getElementById('submitExamBtn');
+    const questionsContainer = document.getElementById('questionsContainer');
+    const examResultDiv = document.getElementById('examResultDiv');
+
+    let currentExamQuestions = [];
+    let userAnswers = [];
+
+    // ========== Funciones auxiliares ==========
+    function addMessageToChat(sender, text, isError = false) {
+        const msgDiv = document.createElement('div');
+        msgDiv.className = 'message';
+        if (isError) msgDiv.style.borderLeftColor = '#ff8989';
+        let displayName = sender === 'user' ? '🔮 Tú' : (sender === 'vaitiare' ? '🧙 Brujita' : '⚗️ Sistema');
+        if (sender === 'system') displayName = '⚗️ Sistema';
+        msgDiv.innerHTML = `<b>${displayName}:</b> ${escapeHtml(text)}`;
+        chatWindow.appendChild(msgDiv);
+        chatWindow.scrollTop = chatWindow.scrollHeight;
     }
 
-    function setSampleText(tipo) {
-      const textarea = document.getElementById("inputText");
-      if (tipo === "cuento") {
-        textarea.value =
-          "Había una vez una pequeña bruja aprendiz que quería entender el poder de las palabras...";
-      } else if (tipo === "teoria") {
-        textarea.value =
-          "La fotosíntesis es el proceso mediante el cual las plantas convierten la energía luminosa...";
-      } else if (tipo === "idiomas") {
-        textarea.value =
-          "Learning a new language is like learning a new spell. Each word has power...";
-      }
-    }
-
-    async function castSpell() {
-      const text = document.getElementById("inputText").value.trim();
-      const mode = document.getElementById("mode").value;
-      const statusEl = document.getElementById("status");
-      const outputContent = document.getElementById("outputContent");
-      const button = document.getElementById("castButton");
-
-      const apiKey = getApiKey();
-
-      if (!text) {
-        statusEl.textContent = "Primero escribe o pega un texto en el grimorio 📜";
-        return;
-      }
-
-      if (!apiKey) {
-        statusEl.textContent = "Debes ingresar tu API key para invocar el conjuro 🔑✨";
-        statusEl.classList.add("error");
-        return;
-      }
-
-      button.disabled = true;
-      statusEl.textContent = "Invocando a la brujita del conocimiento... ✨";
-      statusEl.classList.remove("error");
-      outputContent.textContent = "";
-
-      const systemPrompt =
-        "Eres una brujita maestra del conocimiento. Explicas y creas actividades de estudio " +
-        "de forma mágica, divertida y clara, pero sin perder precisión. Siempre hablas en español.";
-
-      let userPrompt = "";
-
-      if (mode === "resumen") {
-        userPrompt = "Haz un resumen mágico del siguiente texto:\n\n" + text;
-      } else if (mode === "preguntas") {
-        userPrompt = "Genera preguntas tipo quiz sobre este texto:\n\n" + text;
-      } else if (mode === "flashcards") {
-        userPrompt = "Crea flashcards mágicas basadas en este texto:\n\n" + text;
-      } else if (mode === "juego") {
-        userPrompt = "Crea un juego de verdadero/falso basado en este texto:\n\n" + text;
-      } else if (mode === "explicacion") {
-        userPrompt = "Explica este texto como una brujita aprendiz:\n\n" + text;
-      }
-
-      try {
-        const response = await fetch(BACKEND_URL, {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            apiKey: apiKey,
-            systemPrompt: systemPrompt,
-            userPrompt: userPrompt
-          }),
+    function escapeHtml(str) {
+        if (!str) return '';
+        return str.replace(/[&<>]/g, function(m) {
+            if (m === '&') return '&amp;';
+            if (m === '<') return '&lt;';
+            if (m === '>') return '&gt;';
+            return m;
         });
-
-        const data = await response.json();
-        outputContent.textContent = data.choices?.[0]?.message?.content || "Error inesperado.";
-        statusEl.textContent = "Conjuro lanzado con éxito 🪄";
-      } catch (error) {
-        statusEl.textContent = "Hubo un error al llamar al servidor.";
-        statusEl.classList.add("error");
-      } finally {
-        button.disabled = false;
-      }
     }
-  </script>
+
+    async function cargarDocumento(file) {
+        if (!file) return;
+        addMessageToChat('system', `📜 Iniciando lectura del grimorio "${file.name}"...`, false);
+        docStatusDiv.innerHTML = `🔄 Conjurando magia sobre "${file.name}"...`;
+        progressBar.style.display = 'block';
+        progressFill.style.width = '0%';
+        try {
+            let paginasTexto = [];
+            if (file.type === "application/pdf") {
+                const arrayBuffer = await file.arrayBuffer();
+                const pdf = await pdfjsLib.getDocument({ data: arrayBuffer }).promise;
+                totalPaginas = pdf.numPages;
+                for (let i = 1; i <= totalPaginas; i++) {
+                    const page = await pdf.getPage(i);
+                    const content = await page.getTextContent();
+                    const pageText = content.items.map(item => item.str).join(' ');
+                    if (pageText && pageText.trim().length > 10) {
+                        paginasTexto.push({ pageNum: i, text: pageText.trim() });
+                    }
+                    const progreso = (i / totalPaginas) * 100;
+                    progressFill.style.width = `${progreso}%`;
+                    if (i % 30 === 0) docStatusDiv.innerHTML = `📖 Descifrando página ${i}/${totalPaginas}...`;
+                    await new Promise(r => setTimeout(r, 5));
+                }
+            } else {
+                const textoCompleto = await file.text();
+                const tamanoPagina = 2000;
+                const numPaginas = Math.ceil(textoCompleto.length / tamanoPagina);
+                totalPaginas = numPaginas;
+                for (let i = 0; i < numPaginas; i++) {
+                    const inicio = i * tamanoPagina;
+                    const fin = Math.min(inicio + tamanoPagina, textoCompleto.length);
+                    const pageText = textoCompleto.substring(inicio, fin);
+                    if (pageText.trim()) paginasTexto.push({ pageNum: i + 1, text: pageText.trim() });
+                    const progreso = ((i + 1) / numPaginas) * 100;
+                    progressFill.style.width = `${progreso}%`;
+                    if (i % 30 === 0) docStatusDiv.innerHTML = `📖 Desentrañando sección ${i+1}/${numPaginas}...`;
+                    await new Promise(r => setTimeout(r, 5));
+                }
+            }
+            if (paginasTexto.length === 0) throw new Error("No se extrajo texto del grimorio");
+            pageIndex = paginasTexto;
+            documentoIndexado = true;
+            nombreDocumento = file.name;
+            const totalChars = pageIndex.reduce((s,p) => s + p.text.length, 0);
+            docStatusDiv.innerHTML = `📖 Grimorio activo: "${nombreDocumento}" · ${totalPaginas} páginas · ${(totalChars/1024/1024).toFixed(2)} MB de sabiduría`;
+            addMessageToChat('vaitiare', `¡He absorbido la esencia de "${nombreDocumento}"! ${totalPaginas} páginas destiladas. Ahora puedo crear hechizos de preguntas jugosas y responder con la magia del texto.`, false);
+        } catch (err) {
+            docStatusDiv.innerHTML = `⚠️ Error ritual: ${err.message}`;
+            addMessageToChat('system', `Error al indexar: ${err.message}`, true);
+            documentoIndexado = false;
+            pageIndex = [];
+        } finally {
+            progressBar.style.display = 'none';
+            progressFill.style.width = '0%';
+        }
+    }
+
+    // Obtiene contexto balanceado y jugoso de TODO el grimorio (páginas clave)
+    function getBalancedJuicyContext(maxChars = 5500) {
+        if (!documentoIndexado || pageIndex.length === 0) return "";
+        const totalPaginas = pageIndex.length;
+        if (totalPaginas === 0) return "";
+        let indicesSeleccionados = new Set();
+        indicesSeleccionados.add(0);
+        if (totalPaginas > 1) indicesSeleccionados.add(totalPaginas - 1);
+        if (totalPaginas >= 3) {
+            let tercio = Math.floor(totalPaginas / 3);
+            if (tercio > 0 && tercio !== 0 && !indicesSeleccionados.has(tercio)) indicesSeleccionados.add(tercio);
+            let dosTercios = Math.floor(2 * totalPaginas / 3);
+            if (dosTercios > 0 && dosTercios !== tercio && dosTercios < totalPaginas && !indicesSeleccionados.has(dosTercios)) indicesSeleccionados.add(dosTercios);
+        }
+        if (indicesSeleccionados.size < 3 && totalPaginas > 2) {
+            let mitad = Math.floor(totalPaginas / 2);
+            if (!indicesSeleccionados.has(mitad)) indicesSeleccionados.add(mitad);
+        }
+        let contexto = "";
+        let charsAcum = 0;
+        const indicesOrdenados = Array.from(indicesSeleccionados).sort((a,b)=>a-b);
+        for (let idx of indicesOrdenados) {
+            if (idx >= pageIndex.length) continue;
+            let textoPag = pageIndex[idx].text;
+            if (textoPag.length > 1300) textoPag = textoPag.substring(0, 1300) + "…";
+            let fragmento = `🔮 Fragmento esencial (pág. ${pageIndex[idx].pageNum}):\n${textoPag}\n\n`;
+            if (charsAcum + fragmento.length > maxChars) break;
+            contexto += fragmento;
+            charsAcum += fragmento.length;
+        }
+        if (contexto.length === 0) contexto = "Contenido del grimorio no disponible para análisis profundo.";
+        return contexto;
+    }
+
+    function extractJSONFromText(text) {
+        let cleaned = text.replace(/```json/g, '').replace(/```/g, '').trim();
+        const firstBrace = cleaned.indexOf('{');
+        const lastBrace = cleaned.lastIndexOf('}');
+        if (firstBrace === -1 || lastBrace === -1) throw new Error("No se encontró conjuro JSON válido");
+        const jsonStr = cleaned.substring(firstBrace, lastBrace + 1);
+        return JSON.parse(jsonStr);
+    }
+
+    async function generarExamenConGroq() {
+        if (!documentoIndexado || pageIndex.length === 0) {
+            addMessageToChat('system', "Primero carga un grimorio (PDF/TXT) para lanzar el conjuro.", true);
+            return false;
+        }
+        const apiKey = apiKeyInput.value.trim();
+        if (!apiKey) { addMessageToChat('system', "Ingresa tu API Key secreta de Groq.", true); return false; }
+        const numQ = Math.min(parseInt(numPreguntasInput.value, 10), 10);
+        const tipo = tipoExamenSelect.value;
+        const modelo = modelSelect.value;
+
+        const contextoJugoso = getBalancedJuicyContext(5200);
+        if (!contextoJugoso || contextoJugoso.length < 200) { 
+            addMessageToChat('system', "El grimorio tiene muy poca esencia para extraer preguntas jugosas.", true); 
+            return null; 
+        }
+
+        let promptInstrucciones = `Eres la Brujita del Conocimiento, creadora de exámenes arcanos que indagan en el JUGO MÁGICO de los textos. 
+Tu tarea: basándote en los fragmentos esenciales del grimorio, genera ${numQ} preguntas profundas que revelen el alma, contradicciones, moralejas, simbolismos, intenciones ocultas y significado central del contenido.
+EVITA preguntas superficiales (fechas o datos triviales). Tus preguntas deben desafiar la comprensión integral.
+🎯 Tipo de examen: ${tipo === 'multiple' ? 'MULTIPLE CHOICE (4 opciones A, B, C, D)' : 'VERDADERO/FALSO (afirmaciones sustanciosas)'}.
+Para verdadero/falso, formula enunciados que inviten al análisis reflexivo.
+
+Devuelve ÚNICAMENTE un JSON válido, estructura: {"questions": [{"text": "pregunta jugosa", "options": ["op1","op2",...], "correct": "respuesta"}]}
+Para multiple choice: options = 4 strings, correct = letra mayúscula A, B, C o D.
+Para verdadero/falso: options = ["Verdadero", "Falso"], correct = "Verdadero" o "Falso".
+Las preguntas deben ser elixir de sabiduría.`;
+
+        const userContent = `Extractos balanceados del grimorio (páginas clave, inicio y final):\n\n${contextoJugoso}\n\nGenera ${numQ} preguntas jugosas tipo ${tipo} que destilen la verdadera esencia del texto.`;
+
+        try {
+            const response = await fetch(GROQ_API_URL, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${apiKey}` },
+                body: JSON.stringify({
+                    model: modelo,
+                    messages: [
+                        { role: "system", content: promptInstrucciones },
+                        { role: "user", content: userContent }
+                    ],
+                    temperature: 0.55,
+                    max_tokens: 2100
+                })
+            });
+            if (!response.ok) {
+                const errText = await response.text();
+                throw new Error(`Error ${response.status}: ${errText.substring(0, 150)}`);
+            }
+            const data = await response.json();
+            const raw = data.choices[0].message.content;
+            console.log("Respuesta conjuro:", raw);
+            let jsonExam;
+            try {
+                jsonExam = extractJSONFromText(raw);
+            } catch(e) {
+                console.error("Fallo parseo", e);
+                throw new Error("La respuesta no contenía JSON válido, el hechizo falló.");
+            }
+            if (!jsonExam.questions || !Array.isArray(jsonExam.questions)) throw new Error("Formato inválido");
+            return jsonExam.questions.slice(0, numQ);
+        } catch (err) {
+            addMessageToChat('system', `Error en la invocación del conjuro: ${err.message}`, true);
+            return null;
+        }
+    }
+
+    function renderExam(questions) {
+        questionsContainer.innerHTML = "";
+        if (!questions || questions.length === 0) {
+            questionsContainer.innerHTML = "<div style='color:#c6aaff;'>No se pudieron tejer preguntas jugosas. Intenta de nuevo.</div>";
+            submitExamBtn.disabled = true;
+            return;
+        }
+        currentExamQuestions = questions;
+        userAnswers = new Array(questions.length).fill(null);
+        for (let idx = 0; idx < questions.length; idx++) {
+            const q = questions[idx];
+            const card = document.createElement('div');
+            card.className = 'question-card';
+            const qText = document.createElement('div');
+            qText.className = 'question-text';
+            qText.innerText = `${idx+1}. ${q.text}`;
+            card.appendChild(qText);
+            const optsDiv = document.createElement('div');
+            optsDiv.className = 'options';
+            const optionsArray = q.options;
+            if (optionsArray && Array.isArray(optionsArray)) {
+                optionsArray.forEach((opt) => {
+                    const label = document.createElement('label');
+                    label.className = 'option';
+                    const radio = document.createElement('input');
+                    radio.type = 'radio';
+                    radio.name = `question_${idx}`;
+                    radio.value = opt;
+                    radio.addEventListener('change', (e) => {
+                        if (e.target.checked) userAnswers[idx] = opt;
+                    });
+                    const span = document.createElement('span');
+                    span.innerText = opt;
+                    label.appendChild(radio);
+                    label.appendChild(span);
+                    optsDiv.appendChild(label);
+                });
+            } else {
+                optsDiv.innerText = "Opciones mágicas no disponibles";
+            }
+            card.appendChild(optsDiv);
+            questionsContainer.appendChild(card);
+        }
+        submitExamBtn.disabled = false;
+        examResultDiv.style.display = 'none';
+        examResultDiv.innerHTML = "";
+    }
+
+    function calificarExamen() {
+        if (!currentExamQuestions.length) return;
+        let aciertos = 0;
+        const resultados = [];
+        currentExamQuestions.forEach((q, idx) => {
+            const userResp = userAnswers[idx];
+            let correctaRaw = q.correct ? q.correct.trim() : "";
+            const opciones = q.options && Array.isArray(q.options) ? q.options : [];
+            let correctaTexto = correctaRaw;
+            if (correctaRaw.length === 1 && /^[A-Da-d]$/.test(correctaRaw)) {
+                const letraIdx = correctaRaw.toUpperCase().charCodeAt(0) - 65;
+                if (opciones[letraIdx] !== undefined) correctaTexto = opciones[letraIdx];
+            }
+            let isOk = false;
+            if (userResp && correctaTexto) {
+                isOk = correctaTexto.trim().toLowerCase() === userResp.trim().toLowerCase();
+            }
+            if (isOk) aciertos++;
+            resultados.push(`Pregunta ${idx+1}: ${isOk ? '✓' : '✗'} (Correcta: ${correctaTexto})`);
+        });
+        const puntaje = (aciertos / currentExamQuestions.length) * 100;
+        examResultDiv.style.display = 'block';
+        examResultDiv.innerHTML = `<strong>🏆 Resultado mágico: ${aciertos}/${currentExamQuestions.length} (${puntaje.toFixed(0)}%)</strong><br>${resultados.join('<br>')}`;
+        addMessageToChat('vaitiare', `¡Excelente! Has completado el conjuro. Obtuviste ${aciertos} de ${currentExamQuestions.length} aciertos. La sabiduría del grimorio te reconoce.`, false);
+    }
+
+    // ========== CHAT con la brujita ==========
+    async function sendToGroqChat(question, apiKey, modelName) {
+        let contexto = "";
+        if (documentoIndexado && pageIndex.length > 0) {
+            const queryLower = question.toLowerCase();
+            const palabras = queryLower.split(/\s+/).filter(p => p.length > 3);
+            let paginasRelevantes = pageIndex.slice(0, 2);
+            if (palabras.length) {
+                const puntuadas = pageIndex.map(p => {
+                    let score = 0;
+                    palabras.forEach(kw => { if (p.text.toLowerCase().includes(kw)) score += 20; });
+                    return { p, score };
+                });
+                puntuadas.sort((a,b)=>b.score - a.score);
+                paginasRelevantes = puntuadas.slice(0, 2).map(x => x.p);
+            }
+            contexto = "Fragmentos relevantes del grimorio:\n" + paginasRelevantes.map(p => `--- Pág ${p.pageNum} ---\n${p.text.substring(0, 1000)}`).join("\n\n");
+        } else {
+            contexto = "No hay grimorio cargado, responde con tu sabiduría mágica general.";
+        }
+        const system = "Eres la Brujita del Conocimiento (HilosMagicos_774). Tono místico, cálido y profundo. Respondes basándote en el documento subido si existe, revelando el jugo del texto. Si no hay documento, respondes con conocimiento esotérico pero siempre útil.";
+        const payload = {
+            model: modelName,
+            messages: [
+                { role: "system", content: system },
+                { role: "user", content: `Pregunta: ${question}\n\n${contexto}\n\nResponde con claridad y sabiduría, extrayendo esencia si es posible.` }
+            ],
+            temperature: 0.7,
+            max_tokens: 800
+        };
+        const response = await fetch(GROQ_API_URL, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${apiKey}` },
+            body: JSON.stringify(payload)
+        });
+        if (!response.ok) {
+            const errText = await response.text();
+            throw new Error(`Error ${response.status}: ${errText.substring(0, 100)}`);
+        }
+        const data = await response.json();
+        return data.choices[0].message.content;
+    }
+
+    let isSending = false;
+    async function handleChat() {
+        if (isSending) return;
+        const apiKey = apiKeyInput.value.trim();
+        if (!apiKey) { addMessageToChat('system', "Necesitas la llave secreta de Groq para invocar la respuesta.", true); return; }
+        const question = userInput.value.trim();
+        if (!question) return;
+        addMessageToChat('user', question);
+        userInput.value = '';
+        isSending = true;
+        sendBtn.disabled = true;
+        const loadingMsg = document.createElement('div');
+        loadingMsg.className = 'message';
+        loadingMsg.innerHTML = `<b>🧙 Brujita:</b> <em>tejiendo hechizo...</em>`;
+        chatWindow.appendChild(loadingMsg);
+        try {
+            const answer = await sendToGroqChat(question, apiKey, modelSelect.value);
+            loadingMsg.remove();
+            addMessageToChat('vaitiare', answer);
+        } catch (err) {
+            loadingMsg.remove();
+            addMessageToChat('system', `Error en la comunicación: ${err.message}`, true);
+        } finally {
+            isSending = false;
+            sendBtn.disabled = false;
+        }
+    }
+
+    function clearChat() {
+        while (chatWindow.children.length > 1) chatWindow.removeChild(chatWindow.lastChild);
+        addMessageToChat('vaitiare', 'El caldero de la conversación ha sido purificado. Continúa con tus preguntas.');
+    }
+
+    // Eventos
+    fileInput.addEventListener('change', (e) => { if(e.target.files[0]) cargarDocumento(e.target.files[0]); });
+    sendBtn.addEventListener('click', handleChat);
+    clearChatBtn.addEventListener('click', clearChat);
+    userInput.addEventListener('keypress', (e) => { if(e.key === 'Enter') handleChat(); });
+
+    generarExamenBtn.addEventListener('click', async () => {
+        if (!documentoIndexado) { addMessageToChat('system', "Carga un grimorio antes de invocar el conjuro de examen.", true); return; }
+        generarExamenBtn.disabled = true;
+        generarExamenBtn.innerText = "🌙 Tejiendo preguntas jugosas...";
+        questionsContainer.innerHTML = "<div style='text-align:center; color:#d3b5ff'>🔮 Extrayendo la esencia del grimorio...</div>";
+        const preguntas = await generarExamenConGroq();
+        if (preguntas && preguntas.length) {
+            renderExam(preguntas);
+            addMessageToChat('vaitiare', `He preparado ${preguntas.length} preguntas que destilan el jugo del conocimiento. ¡Descubre los secretos del texto!`, false);
+        } else {
+            questionsContainer.innerHTML = "<div style='color:#ceabff'>El conjuro falló. Verifica tu llave API o que el grimorio tenga texto sustancioso.</div>";
+            submitExamBtn.disabled = true;
+        }
+        generarExamenBtn.disabled = false;
+        generarExamenBtn.innerText = "🌙 GENERAR CONJURO (preguntas jugosas)";
+    });
+
+    submitExamBtn.addEventListener('click', () => {
+        if (!currentExamQuestions.length) { addMessageToChat('system', "No hay examen activo. Invoque uno primero.", true); return; }
+        calificarExamen();
+    });
+</script>
 </body>
 </html>
