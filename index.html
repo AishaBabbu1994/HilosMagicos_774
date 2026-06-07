@@ -29,7 +29,6 @@
             border-radius: 3rem;
             padding: 1.8rem 2rem 2.2rem;
             box-shadow: 0 25px 45px rgba(0, 0, 0, 0.3), 0 0 0 1px rgba(255, 215, 150, 0.2);
-            transition: all 0.2s ease;
         }
 
         h1 {
@@ -40,9 +39,7 @@
             background-clip: text;
             -webkit-background-clip: text;
             color: transparent;
-            text-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
             margin-bottom: 0.5rem;
-            letter-spacing: -0.5px;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -64,7 +61,6 @@
             margin: 1.2rem 0 0.5rem 0;
             color: #3e2a2f;
             font-size: 1rem;
-            letter-spacing: -0.2px;
         }
 
         label:first-of-type {
@@ -86,7 +82,6 @@
         input {
             background: #fffef7;
             font-family: monospace;
-            letter-spacing: 0.3px;
         }
 
         textarea:focus, input:focus {
@@ -161,10 +156,6 @@
             color: #5e4b3c;
         }
 
-        .api-status span {
-            font-weight: bold;
-        }
-
         .valid-key {
             color: #2b6e3c;
         }
@@ -211,15 +202,20 @@
             color: #cdba95;
         }
 
-        hr {
-            margin: 0.5rem 0;
-            border-color: #e9d5b5;
-        }
-
         .helper-text {
             font-size: 0.7rem;
             color: #8b765a;
             margin-top: 0.2rem;
+        }
+
+        .warning-banner {
+            background: #fff3cd;
+            border-left: 4px solid #ffc107;
+            padding: 0.8rem;
+            border-radius: 1rem;
+            margin-bottom: 1rem;
+            font-size: 0.8rem;
+            color: #856404;
         }
 
         @media (max-width: 550px) {
@@ -239,14 +235,17 @@
 <div class="app">
     <h1>🔮 Brujita del Conocimiento <span style="font-size:1.9rem;">✨</span></h1>
     <div class="card">
-        <!-- 🔑 BARRA PARA INGRESAR API KEY -->
+        <div class="warning-banner">
+            ⚠️ Versión con proxy CORS (solución temporal). Tu API Key viaja de forma segura solo en tu navegador.
+        </div>
+
         <div class="api-key-row">
             <label>🔐 Llave mágica (API Key de Groq) 🗝️</label>
             <input type="password" id="apiKeyInput" placeholder="gsk_... pega aquí tu API Key de Groq" autocomplete="off">
             <div class="api-status" id="apiStatus">
                 <span>🔮</span> <span id="apiStatusText">Esperando clave...</span>
             </div>
-            <div class="helper-text">✨ Obtén tu clave gratis en <a href="https://console.groq.com" target="_blank" style="color:#b57c48;">console.groq.com</a> (se guarda solo en este navegador)</div>
+            <div class="helper-text">✨ Obtén tu clave gratis en <a href="https://console.groq.com" target="_blank" style="color:#b57c48;">console.groq.com</a></div>
         </div>
 
         <label>📜 Texto del grimorio</label>
@@ -267,16 +266,14 @@
             💫 El resultado aparecerá aquí después de invocar a la API...
         </div>
     </div>
-    <footer>🐈‍⬛ Grimorio potenciado por Groq • Tu clave se guarda localmente</footer>
+    <footer>🐈‍⬛ Usando proxy CORS • Tu clave se guarda localmente</footer>
 </div>
 
 <script>
-    // --------------------------------------------------------------
-    // CONFIGURACIÓN: La API Key se lee desde el input del usuario
+    // CONFIGURACIÓN: Usamos un proxy CORS gratuito para evitar el bloqueo
+    const PROXY_URL = 'https://corsproxy.io/';
     const API_URL = 'https://api.groq.com/openai/v1/chat/completions';
-    // --------------------------------------------------------------
-
-    // Elementos DOM
+    
     const apiKeyInput = document.getElementById('apiKeyInput');
     const apiStatusText = document.getElementById('apiStatusText');
     const inputTextarea = document.getElementById('inputText');
@@ -284,7 +281,6 @@
     const castButton = document.getElementById('castBtn');
     const resultDiv = document.getElementById('resultContainer');
 
-    // Cargar API Key guardada en localStorage al iniciar
     function loadStoredApiKey() {
         const storedKey = localStorage.getItem('groq_api_key');
         if (storedKey) {
@@ -295,8 +291,7 @@
         }
     }
 
-    // Actualizar estado visual de la API Key
-    function updateApiStatus(isValidFormat = null) {
+    function updateApiStatus() {
         const currentKey = apiKeyInput.value.trim();
         if (!currentKey) {
             apiStatusText.innerHTML = '⚠️ Sin llave mágica — ingresa tu API Key';
@@ -315,7 +310,6 @@
         }
     }
 
-    // Guardar clave en localStorage cuando el usuario la escribe
     function saveApiKey() {
         const key = apiKeyInput.value.trim();
         if (key) {
@@ -326,12 +320,10 @@
         updateApiStatus();
     }
 
-    // Obtener la clave actual
     function getApiKey() {
         return apiKeyInput.value.trim();
     }
 
-    // Función para construir el prompt según el modo seleccionado
     function buildPrompt(textoUsuario, modo) {
         const instruccionesBase = `Eres la "Brujita del Conocimiento", una sabia y divertida maga que ayuda a estudiar y comprender textos. 
 Usa un tono cálido, místico pero claro, con emojis ocasionales. Siempre responde en español. El texto original es: 
@@ -340,34 +332,29 @@ Usa un tono cálido, místico pero claro, con emojis ocasionales. Siempre respon
         switch (modo) {
             case 'resumen':
                 return `${instruccionesBase}\n\n📜 **CONJURO DE RESUMEN**: Haz un resumen conciso pero completo del texto, destacando las ideas principales, en 6 a 10 líneas. Usa viñetas o párrafos claros.`;
-
             case 'preguntas':
                 return `${instruccionesBase}\n\n❓ **QUIZ MÁGICO**: Genera 5 preguntas de opción múltiple (tipo test) basadas en el texto. Cada pregunta debe tener 4 opciones (A, B, C, D) y al final indica la respuesta correcta brevemente. Formato claro.`;
-
             case 'flashcards':
                 return `${instruccionesBase}\n\n🃏 **FLASHCARDS**: Crea 4-6 fichas de estudio. Cada flashcard debe tener: "📌 Término:" y "✨ Definición/Concepto:". Sepáralas con líneas.`;
-
             case 'vf':
                 return `${instruccionesBase}\n\n⚖️ **VERDADERO O FALSO**: Genera 5 afirmaciones basadas en el texto. Cada una debe ir acompañada de "✅ Verdadero" o "❌ Falso". Al final proporciona una pequeña corrección para las falsas.`;
-
             case 'explicacion':
                 return `${instruccionesBase}\n\n🧙 **EXPLICACIÓN ESTILO BRUJITA**: Explica el contenido como si fueras una maestra mágica, usando analogías, chispa y sabiduría. Hazlo ameno, didáctico y profundo pero no demasiado largo (4-6 párrafos).`;
-
             default:
                 return `${instruccionesBase}\n\nAnaliza el texto y entrega información útil para estudiar.`;
         }
     }
 
-    // Función para invocar Groq
     async function invokeGroq(prompt, apiKey) {
-        const response = await fetch(API_URL, {
+        // Llamada a través del proxy CORS
+        const response = await fetch(`${PROXY_URL}?url=${encodeURIComponent(API_URL)}`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
                 'Authorization': `Bearer ${apiKey}`
             },
             body: JSON.stringify({
-                model: 'groq/compound',   // modelo rápido y bueno de Groq
+                model: 'groq/compound',
                 messages: [
                     { role: 'system', content: 'Eres una asistente mágica, experta en pedagogía, que responde con creatividad y precisión.' },
                     { role: 'user', content: prompt }
@@ -383,7 +370,7 @@ Usa un tono cálido, místico pero claro, con emojis ocasionales. Siempre respon
             try {
                 const errData = await response.json();
                 errorDetail = errData.error?.message || JSON.stringify(errData);
-            } catch(e) { /* no json */ }
+            } catch(e) { }
             throw new Error(`Groq Error: ${errorDetail}`);
         }
 
@@ -393,7 +380,6 @@ Usa un tono cálido, místico pero claro, con emojis ocasionales. Siempre respon
         return respuesta;
     }
 
-    // Mostrar loading
     function setLoading(isLoading) {
         if (isLoading) {
             castButton.disabled = true;
@@ -410,7 +396,6 @@ Usa un tono cálido, místico pero claro, con emojis ocasionales. Siempre respon
     }
 
     function showResult(texto) {
-        // Escapar HTML básico para seguridad, pero permitir saltos de línea
         const textoFormateado = texto
             .replace(/&/g, '&amp;')
             .replace(/</g, '&lt;')
@@ -420,22 +405,21 @@ Usa un tono cálido, místico pero claro, con emojis ocasionales. Siempre respon
         resultDiv.classList.remove('error');
     }
 
-    // Evento principal
     async function lanzarConjuro() {
         const apiKey = getApiKey();
         if (!apiKey) {
-            showError("🔑 ¡Necesitas una llave mágica! Ingresa tu API Key de Groq en el campo de arriba. Consíguela gratis en console.groq.com");
+            showError("🔑 ¡Necesitas una llave mágica! Ingresa tu API Key de Groq.");
             return;
         }
         
         if (!apiKey.startsWith('gsk_') || apiKey.length < 30) {
-            showError("⚠️ La llave parece incorrecta. Las API Keys de Groq empiezan con 'gsk_' y son largas. Revisa y vuelve a pegarla.");
+            showError("⚠️ La llave parece incorrecta. Las API Keys de Groq empiezan con 'gsk_' y son largas.");
             return;
         }
 
         const textoUsuario = inputTextarea.value.trim();
         if (!textoUsuario) {
-            showError("📜 ¡Oh no! El grimorio está vacío. Escribe o pega algún texto mágico antes de lanzar el hechizo.");
+            showError("📜 ¡Oh no! El grimorio está vacío. Escribe o pega algún texto mágico.");
             return;
         }
 
@@ -446,19 +430,16 @@ Usa un tono cálido, místico pero claro, con emojis ocasionales. Siempre respon
         try {
             const respuestaMagica = await invokeGroq(promptFinal, apiKey);
             showResult(respuestaMagica);
-            // Guardar la clave si es exitosa (ya se guarda con el evento)
             saveApiKey();
         } catch (err) {
             console.error(err);
             let userMessage = err.message;
-            if (userMessage.includes('API Key') || userMessage.includes('api_key') || userMessage.includes('unauthorized') || userMessage.includes('401')) {
-                userMessage = '🔐 Llave mágica inválida o rechazada. Verifica que tu API Key de Groq sea correcta (empieza con gsk_) y tenga créditos.';
-            } else if (userMessage.includes('fetch') || userMessage.includes('network')) {
-                userMessage = '🌙 Error de red: ¿Estás conectado/a? Revisa tu conexión o si hay un bloqueador.';
-            } else if (userMessage.includes('429')) {
-                userMessage = '⏳ Demasiadas peticiones mágicas. Espera un poco y vuelve a intentar.';
+            if (userMessage.includes('401') || userMessage.includes('unauthorized')) {
+                userMessage = '🔐 Llave mágica inválida. Verifica tu API Key de Groq.';
+            } else if (userMessage.includes('fetch')) {
+                userMessage = '🌙 Error de conexión. Intenta de nuevo o cambia de proxy.';
             } else {
-                userMessage = `💀 Hechizo fallido: ${err.message}`;
+                userMessage = `💀 ${err.message}`;
             }
             showError(userMessage);
         } finally {
@@ -466,21 +447,13 @@ Usa un tono cálido, místico pero claro, con emojis ocasionales. Siempre respon
         }
     }
 
-    // Eventos
     castButton.addEventListener('click', lanzarConjuro);
     apiKeyInput.addEventListener('input', () => {
         updateApiStatus();
-        // guardar automáticamente mientras escribe (con pequeño debounce)
         clearTimeout(window.saveTimeout);
-        window.saveTimeout = setTimeout(() => {
-            saveApiKey();
-        }, 800);
+        window.saveTimeout = setTimeout(saveApiKey, 800);
     });
-    
-    // Guardar también al perder foco
     apiKeyInput.addEventListener('blur', saveApiKey);
-
-    // Ctrl+Enter en textarea
     inputTextarea.addEventListener('keydown', (e) => {
         if ((e.ctrlKey || e.metaKey) && e.key === 'Enter') {
             e.preventDefault();
@@ -488,7 +461,6 @@ Usa un tono cálido, místico pero claro, con emojis ocasionales. Siempre respon
         }
     });
 
-    // Inicializar: cargar clave guardada y mostrar estado
     loadStoredApiKey();
     updateApiStatus();
 </script>
